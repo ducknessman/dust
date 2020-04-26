@@ -28,11 +28,13 @@ Dust主要是本人的练手写的，用来辅助测试，优化集成和一些�
 ![avatar](img/18.png)
 ![avatar](img/19.png)
 ![avatar](img/20.png)
+![avatar](img/21.png)
 
 ### 安装
 #### 1. 安装对应的库
 >pip install -r requirements.txt
-pip3 install -r requirements.txt
+
+>pip3 install -r requirements.txt
 
 #### 2. 初始化数据库
 找到app目录下的models.py 文件，直接运行即可。因为我没有删除我的数据库文件，所以可以直接使用。ps:(但是不建议)
