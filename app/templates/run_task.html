@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}用例执行{% endblock %}
+
+{% block navbar %}
+<section class="content-header">
+    <h1>用例执行</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">用例管理</li>
+        <li class="active">用例执行</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box box-primary">
+    <form method="post">
+        {{form.hidden_tag()}}
+        <div class="box-header with-border">
+            {% include 'message.html' %}
+        </div>
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>查询内容</label>
+                        {{form.search(class_="form-control",placeholder="请输入")}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{form.search_name.label}}</label>
+                        {{form.search_name(class_="form-control select2",placeholder="请输入")}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{form.choice_env.label}}</label>
+                        {{form.choice_env(class_="form-control select2",placeholder="请输入")}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+            <div class="col-md-12">
+                {{form.run(class_="btn btn-primary  pull-right")}}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        $(".select2").select2();
+    }
+</script>
+{% endblock %}

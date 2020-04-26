@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>在线报告展示</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-slider/slider.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pace/pace.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-switch/bootstrap-switch.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/adminlte/css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/adminlte/css/skins/skin-blue.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <!--[if lt IE 9]>
+    <script src="plugins/html5shiv.min.js"></script>
+    <script src="plugins/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts-wordcloud.min.js"></script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<header class="main-header">
+        <a href="{{ url_for('main.index') }}" class="logo">
+            <span class="logo-mini"><b>A</b></span>
+            <span class="logo-lg"><b>管理平台</b></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{ url_for('static', filename='images/avatar.jpg') }}" class="user-image"
+                                 alt="User Image">
+                            <span class="hidden-xs">{{current_user.username}}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="{{ url_for('static', filename='images/avatar.jpg') }}"
+                                     class="img-circle" alt="User Image">
+                                <p>
+                                    <span>{{current_user.fullname}}</span>
+                                    <small>{{current_user.email}}</small>
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="{{ url_for('main.index') }}" class="btn btn-default btn-flat">统计信息</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="{{ url_for('auth.logout') }}" class="btn btn-default btn-flat">退出登录</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="header">功能导航</li>
+                <li>
+                    <a href="{{ url_for('main.show_report') }}">
+                        <i class="fa fa-reply"></i>
+                        <span>返回页面</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>分析报告在线展示</h1>
+            <ol class="breadcrumb">
+                <li><i class="fa fa-dashboard"></i> 当前位置</li>
+                <li class="active">报告展示</li>
+                <li class="active">分析报告在线展示</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div id="bar"  style="width:1500px; height:350px;"></div>
+            <div id="bar1" style="width:1500px; height:350px;"></div>
+        </section>
+    </div>
+<footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>版本号</b> 1.0.0
+        </div>
+        Copyright &copy; 2020 <a href="https://www.bkex.co/">Bkex-Test</a>
+    </footer>
+    <!--模态窗口-->
+    <div class="modal-wrapper">
+        <div id="alert-modal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        提示内容
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left btn-no" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-default btn-yes" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/new/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/fastclick/fastclick.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/bootstrap-slider/bootstrap-slider.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/pace/pace.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/bootstrap-switch/bootstrap-switch.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/select2/select2.full.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/adminlte/js/app.min.js') }}"></script>
+
+<script>
+    var chart1 = echarts.init(document.getElementById('bar'),'white',{renderer:'canvas'});
+    var chart2 = echarts.init(document.getElementById('bar1'),'white',{renderer:'canvas'});
+    $(
+    function () {
+        fetchDataPie(chart1);
+        fetchDataWordCould(chart2)
+        }
+    );
+    function fetchDataPie() {
+        $.ajax({
+            type:"GET",
+            url:'http://127.0.0.1:5000/analysis_report/pieChart',
+            dataType:'json',
+            success: function (result1) {
+                chart1.setOption(result1);
+                }
+        });
+    }
+    function fetchDataWordCould() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://127.0.0.1:5000/analysis_report/wordCouldChart',
+            dataType: 'json',
+            success: function (result2) {
+                chart2.setOption(result2);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

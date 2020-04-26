@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block navbar %}
+<section class="content-header">
+    <h1>首页</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">首页</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 id="count01">{{ num1 }}</h3>
+                        <p>用例统计信息</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-gear-outline"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 id="count02">{{ num2 }}</h3>
+                        <p>测试报告数量信息</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-iphone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 id="count03">{{ num3 }}</h3>
+                        <p>人员统计信息</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 id="count04">{{ num4 }}%</h3>
+                        <p>成功率统计信息</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+               <div class="small-box">
+                   <div class="inner">
+                       <div id="bar" style="width:1500px; height:500px;"></div>
+                   </div>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info"></i> 温馨提示</h4>
+            <ol>
+                <li>此项目为临时练手项目，如出现bug请及时联系管理员</li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        var jsInObj = null;
+        restTemplate("GET", "/stats/summary", jsInObj, function (jsOutObj) {
+            $("#count01").text(jsOutObj.batch_count);
+            $("#count02").text(jsOutObj.test_count);
+            $("#count03").text(jsOutObj.succ_count);
+            $("#count04").text(jsOutObj.fail_count);
+        });
+    }
+</script>
+<script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+<script>
+        var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+        var old_data1 = [];
+        var old_data2 = [];
+        var old_data3 = [];
+        $(
+            function () {
+                fetchData(chart);
+                setInterval(getDynamicData, 600000);
+            }
+        );
+
+        function fetchData() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/lineChart",
+                dataType: "json",
+                success: function (result) {
+                    chart.setOption(result);
+                    old_data1 = chart.getOption().series[0].data;
+                    old_data2 = chart.getOption().series[1].data;
+                    old_data3 = chart.getOption().series[2].data;
+                }
+            });
+        }
+
+        function getDynamicData() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/lineDynamicData",
+                dataType: "json",
+                success: function (result) {
+                    old_data1.push([result.name1, result.value1]);
+                    old_data2.push([result.name2, result.value2]);
+                    old_data3.push([result.name3, result.value3]);
+                    chart.setOption({
+                        series: [{data: old_data1},{data: old_data2},{data: old_data3}]
+                    });
+                }
+            });
+        }
+</script>
+{% endblock %}

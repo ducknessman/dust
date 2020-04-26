@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}接口调试插件{% endblock %}
+
+{% block css %}
+<link href="../static/postman/source/base.css" rel="stylesheet" type="text/css" />
+<link href="../static/postman/source/tools/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="../static/postman/source/plug.css" rel="stylesheet" type="text/css" />
+<link href="../static/postman/source/tools/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="../static/postman/source/tools/jquery.jsonview.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block navbar %}
+<section class="content-header">
+    <h1>单目调试</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">单目调试</li>
+        <li class="active">SinglePost</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<li>
+	<a href="{{url_for('main.index')}}" target="_self" class="btn btn-menu btn-sm btn-main fr mr10 mt5">刷新页面</a>
+</li>
+
+<div id="right" class="BGF9 h m0 fr p0 ofy-s fl"  style="width:100%;">
+	<!--顶部空白-->
+	<div class="BGF9 h40 w"></div>
+	<div class="cb"></div>
+
+	<!--参数、头、相应结果-->
+	<div class="w h mt10 rel">
+		<form method="post">
+		{{ form.hidden_tag() }}
+
+		<input type="hidden" id="interface-id" value="-1"/>
+		<input type="hidden" id="module-id" value="-1"/>
+
+		<div class="pl10 pr10">
+
+			<!-- 1.接口名 -->
+			<div class="input-group">
+				<span class="w10 group-addon bl3"></span>
+				{{ form.task_name(class_="form-control f16 color-main r5 h37",id="interface-name",autocomplete="off",placeholder="请输入")}}
+				<span class="w10 group-addon"></span>
+				<!-- 环境 -->
+				<div class="dropdown group-addon h37">
+					<span class="w10 group-addon"></span>
+					<span>{{form.task_name.label}}</span>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- 2.接口名 -->
+		<table class="w mt10">
+			<tr>
+				<td class="w100 pr10 pl10">
+					{{form.task_method(class="form-control  w100 r5 h37 dis-in-tab select2" ,placeholder="请输入")}}
+				</td>
+				<td class="pr10">
+					<div class="input-group" style="top: 6px">
+
+						{{form.task_url(class_="form-control r5 h37",placeholder="请输入url")}}
+
+						<span class="w10 group-addon"></span>
+
+						<span class="btn group-addon btn-main ml10 f12" id="send">
+<!--								btn btn-primary pull-right group-addon btn-main  ml10 f12-->
+							{{form.submit(class_="btn btn-main")}}
+							<i class="iconfont f16 mr5 mt-2">&#xe634;</i>
+						</span>
+
+						<span class="w10 group-addon"></span>
+
+						<span class="col-md-12">{{form.status()}}保存</span>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+		<!--接口请求头、参数等切换标签-->
+		<div class="h30 mt10 shadow-b pl10 C555">
+			<div class="params-title menu-title" data-stage="headers-div" data-i18n="right.header">请求头</div>
+			<div class="params-title menu-title bb2" data-stage="params-div" data-i18n="right.param">请求参数</div>
+			<div class="params-title menu-title bb2" data-stage="cookies-div" data-i18n="right.cookies">cookies</div>
+		</div>
+
+		<!--请求头-->
+		<div class="p10 bt1 bb1 none" id="headers-div">
+			<table class="params-headers-table f12 w"  id="headers-table">
+				<thead>
+					<tr>
+						<td class="p5" style="width:30%">
+							Key:Value(每组值之间使用逗号间隔)
+						</td>
+					</tr>
+				</thead>
+
+			</table>
+
+			<div id="headers-bulk-edit-div" class=" f12 ">
+					{{form.header(class_="form-control",placeholder="请输入")}}
+			</div>
+		</div>
+		<!--请求头-->
+
+		<!--参数-->
+		<div class="bb1" id="params-div">
+			<div class="bt1 p10">
+				<table class="params-headers-table f12 w" id="params-table">
+					<thead>
+					   <tr>
+							<td class="p5" style="width:30%">
+								Key:Value(每组值之间使用逗号间隔)
+							</td>
+						</tr>
+					</thead>
+				</table>
+
+				<div id="params-bulk-edit-div" class=" f12 ">
+<!--					<textarea id="params-bulk" class="form-control w BGFFF min-h100 max-w" placeholder="key:value">-->
+						{{form.data(class_="form-control",placeholder="请输入")}}
+<!--					</textarea>-->
+				</div>
+			</div>
+		</div>
+		<!--请求头-->
+		<div class="p10 bt1 bb1 none" id="cookies-div">
+			<table class="params-headers-table f12 w"  id="cookies-table">
+				<thead>
+					<tr>
+						<td class="p5" style="width:30%">
+							Key:Value(每组值之间使用逗号间隔)
+						</td>
+					</tr>
+				</thead>
+
+			</table>
+
+			<div id="cookies-bulk-edit-div" class=" f12 ">
+					{{form.cookies(class_="form-control",placeholder="请输入")}}
+			</div>
+		</div>
+		<!--请求头-->
+		<!--参数：end-->
+			<div class="bb1 mt10 shadow-b pl10 C555 mb10" style="height: 550px">
+				<div class="box-header with-border">
+            		{% include 'message.html' %}
+        		</div>
+			</div>
+
+		</form>
+
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/postman/source/constant.js"></script>
+<script src="../static/postman/source/tools/jquery-1.9.1.min.js"></script>
+<script src="../static/postman/source/tools/i18next-1.11.2.min.js"></script>
+<script src="../static/postman/source/tools/bootstrap.js"></script>
+<script src="../static/postman/source/base-dao.js"></script>
+<script src="../static/postman/source/interface-dao.js"></script>
+<script src="../static/postman/source/module-dao.js"></script>
+<script src="../static/postman/source/plug-function.js"></script>
+<script src="../static/postman/source/crapApi.js"></script>
+<script src="../static/postman/source/tools/jquery.jsonview.js"></script>
+<script src="../static/postman/source/json.js"></script>
+<script type="text/javascript" src="../static/postman/source/tools/jquery-ui.min.js"></script>
+
+<script>
+    function initPage() {
+        switch_value = $('#status')[0].checked;
+        $('#status').bootstrapSwitch({
+            state: switch_value,
+            onText: '保存',
+            offText: '不保存'
+
+        });
+
+        $(".select2").select2();
+    }
+</script>
+<script>
+    function clear(){
+    var allInput = document.body.getElementsByTagName("input");
+    for (var i = 0; i < allInput.length; i++) {
+        var item = allInput[i];
+        if (item.type == "text") {
+            item.value = "";
+        }
+    }
+}
+</script>
+{% endblock %}

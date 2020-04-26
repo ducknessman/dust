@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}用例查询{% endblock %}
+{% block navbar %}
+<section class="content-header">
+    <h1>用例查询</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">用例管理</li>
+        <li class="active">用例查询</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box-header with-border">
+    {% include 'message.html' %}
+</div>
+
+<li>
+    <a href="{{url_for('main.method_index')}}" target="_self" class="btn btn-menu btn-sm btn-main fr mr10 mt5">返回开源小工具</a>
+</li>
+
+<div class="tab-pane" id="tab_1">
+    <div class="box box-info">
+        <form method="post">
+            {{form.hidden_tag()}}
+            <div class="box-body">
+                <div class="form-group">
+                    <label>url</label>
+                    {{form.url(class_="form-control",placeholder="请输入")}}
+                </div>
+
+                <div class="form-group">
+                    <label>方法</label>
+                    {{form.method(class_="form-control select2",placeholder="请输入")}}
+                </div>
+
+                <div class="form-group">
+                    <label>并发数量</label>
+                    {{form.number(class_="form-control",placeholder="最多支持100并发")}}
+                </div>
+
+                <div class="form-group">
+                    <label>data</label>
+                    {{form.data(class_="form-control",placeholder="请输入")}}
+                </div>
+
+                <div class="form-group">
+                    <label>token</label>
+                    {{form.token(class_="form-control",placeholder="请输入")}}
+                </div>
+            </div>
+
+            <div class="box-footer">
+                <div class="col-md-12">
+                    {{form.submit(class_="btn btn-primary pull-right")}}
+                </div>
+            </div>
+
+            <textarea class="textarea" style="height: 300px">
+                {{secret}}
+            </textarea>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

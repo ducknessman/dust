@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts-wordcloud.min.js"></script>
+</head>
+<body>
+    <div id="bar" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="bar1" style="width:1000px; height:600px;"></div>
+    <script>
+        var chart1 = echarts.init(document.getElementById('bar'),'white',{renderer:'canvas'});
+        var chart2 = echarts.init(document.getElementById('bar1'),'white',{renderer:'canvas'});
+        $(
+        function () {
+            fetchDataPie(chart1);
+            fetchDataWordCould(chart2)
+            }
+        );
+        function fetchDataPie() {
+            $.ajax({
+                type:"GET",
+                url:'http://127.0.0.1:5000/analysis_report/pieChart',
+                dataType:'json',
+                success: function (result1) {
+                    chart1.setOption(result1);
+                    }
+            });
+        }
+        function fetchDataWordCould() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:5000/analysis_report/wordCouldChart',
+                dataType: 'json',
+                success: function (result2) {
+                    chart2.setOption(result2);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

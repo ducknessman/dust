@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block navbar %}
+<section class="content-header">
+    <h1>开源小工具</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">开源小工具首页</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="row" style="height: 150px">
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-aqua">
+                    <div class="inner" style="height: 100px">
+                        <p>在线json格式化工具</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-flag"></i>
+                    </div>
+                    <a href="{{url_for('main.method_json')}}" class="small-box-footer">
+                        json格式化工具
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-red-gradient">
+                    <div class="inner" style="height: 100px">
+
+                        <p>图像对比</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-picture-o"></i>
+                    </div>
+                    <a href="" class="small-box-footer">
+                        图像对比
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="height: 150px">
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-aqua">
+                    <div class="inner" style="height: 100px">
+                        <p>Google验证码</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-google"></i>
+                    </div>
+                    <a href="{{url_for('main.method_google_code')}}" class="small-box-footer">
+                        Google验证码
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-red-gradient">
+                    <div class="inner" style="height: 100px">
+
+                        <p>加解密</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-magic"></i>
+                    </div>
+                    <a href="{{url_for('main.method_secret')}}" class="small-box-footer">
+                        加解密
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-orange-active">
+                    <div class="inner" style="height: 100px">
+
+                        <p>异步并发</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-space-shuttle"></i>
+                    </div>
+                    <a href="{{url_for('main.method_async')}}" class="small-box-footer">
+                        异步并发
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-yellow">
+                    <div class="inner" style="height: 100px">
+
+                        <p>同步并发</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-fighter-jet"></i>
+                    </div>
+                    <a href="" class="small-box-footer">
+                        同步并发
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        var jsInObj = null;
+        restTemplate("GET", "/stats/summary", jsInObj, function (jsOutObj) {
+            $("#count01").text(jsOutObj.batch_count);
+            $("#count02").text(jsOutObj.test_count);
+            $("#count03").text(jsOutObj.succ_count);
+            $("#count04").text(jsOutObj.fail_count);
+        });
+    }
+</script>
+<!--<script>-->
+
+<!--    $(".nav  li").click(function () {-->
+<!--        var now_index = $(this).index();-->
+<!--        console.log('the now index is ' + now_index);-->
+<!--        sessionStorage.setItem('now_index',now_index);-->
+<!--    });-->
+
+<!--    $(function () {-->
+<!--        var getIndex = sessionStorage.getItem('now_index');-->
+<!--        $(".nav.nav-tabs li").eq(getIndex).addClass('active').siblings().removeClass("active");-->
+<!--        $(".tab-content>div").eq(getIndex).addClass('tab-pane').siblings().removeClass("tab-pane");-->
+<!--    })-->
+
+
+<!--</script>-->
+<!--<script>-->
+<!--    function clear(){-->
+<!--    var allInput = document.body.getElementsByTagName("input");-->
+<!--    for (var i = 0; i < allInput.length; i++) {-->
+<!--        var item = allInput[i];-->
+<!--        if (item.type == "text") {-->
+<!--            item.value = "";-->
+<!--        }-->
+<!--    }-->
+<!--}-->
+<!--</script>-->
+{% endblock %}

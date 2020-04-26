@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}单目调试{% endblock %}
+
+
+{% block navbar %}
+<section class="content-header">
+    <h1>单目调试</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">单目调试</li>
+        <li class="active">SinglePost</li>
+    </ol>
+</section>
+{% endblock %}
+
+
+{% block content %}
+<div class="box box-primary">
+    <form method="post">
+        {{form.hidden_tag()}}
+        <div class="box-header with-border">
+            {% include 'message.html' %}
+        </div>
+
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>{{form.task_name.label}}</label>
+                    {{form.task_name(class_="form-control",placeholder="请输入")}}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>{{form.task_url.label}}</label>
+                    {{form.task_url(class_="form-control",placeholder="请输入")}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>{{form.task_method.label}}</label>
+                    {{form.task_method(class_="form-control select2",placeholder="请输入")}}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>{{form.task_data.label}}</label>
+                    {{form.task_data(class_="form-control",placeholder="请输入")}}
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+            <div class="col-md-12">
+                {{form.status()}}
+                {{form.submit(class_="btn btn-primary pull-right")}}
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+          <label>Textarea</label>
+          <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        slide_value = $(".slider").val() == "" ? 50 : parseInt($(".slider").val());
+        $(".slider").slider({
+            id: "blue",
+            max: 100,
+            value: slide_value
+        });
+
+        switch_value = $('#status')[0].checked
+        $('#status').bootstrapSwitch({
+            state: switch_value,
+            onText: '生效',
+            offText: '失效'
+
+        });
+
+        $(".select2").select2();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,333 @@
+@font-face {
+    font-family: "iconfont";
+    src: url('iconfont/iconfont.eot'); /* IE9*/
+    src: url('iconfont/iconfont.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('iconfont/iconfont.woff') format('woff'), /* chrome, firefox */
+    url('iconfont/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+*{"PingFangSC-Regular","Helvetica Neue","Helvetica","Microsoft YaHei","sans-serif","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    color: #303030;
+}
+input{
+    -webkit-box-shadow:none!important;
+    box-shadow:none!important;
+}
+.group-addon{
+    width: 1%;
+    white-space: nowrap!important;
+    vertical-align: middle;
+    display: table-cell!important;
+}
+.GET{color:#99cc66;}
+.POST{color:#ff9933;}
+.DELETE{color:red;}
+.PUT{color:#16C2C2;}
+.color-main {
+    color: #4e61d4;
+}
+.color-adorn {
+    color: #ff4530;
+}
+.bg-main {
+    background-color: #5e71e4!important;
+    color: #ffffff!important;
+}
+.form-control {
+    border:1px solid #dddddd;
+}
+.btn-menu {
+    -moz-border-radius: 4px;-webkit-border-radius: 4px;border-radius: 4px;-khtml-border-radius: 4px;
+    border: 0px;
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+    color: #ffffff;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.btn-menu:hover, .btn-menu:focus {
+    background: #ff4530!important;
+    color: #ffffff!important;
+    font-weight:300;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.btn-adorn {
+    border: 1px solid #ff4530!important;
+    background-color: #ff4530!important;
+    color: #ffffff!important;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.btn-adorn:hover, .btn-main:focus {
+    border: 1px solid #ff4530!important;
+    background: #ff4530!important;
+    color: #ffffff!important;
+    opacity: 0.8;
+}
+.btn-main {
+    border: 1px solid #4e61d4;
+    background-color: #4e61d4;
+    color: #ffffff;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.btn-main:hover, .btn-main:focus{
+    border: 1px solid #4e61d4;
+    background: #4e61d4;
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.btn-default:hover{
+    border: 1px solid #333333;
+    background: #333333;
+    color: #ffffff;
+}
+#params-div .iconfont, #headers-div .iconfont {
+    color:#999999;
+    font-size:12px;
+    cursor: pointer;
+}
+.last i {
+    display: none;
+}
+.menu-title {
+    cursor: pointer;
+    padding-bottom: 5px;
+    float: left;
+    padding-left:15px;
+    padding-right:15px;
+    height:30px;
+}
+.panel-heading {
+    border-bottom:1px solid #e0e0e0!important;
+    background-color: #f5f5f5!important;
+    color: #555555!important;
+}
+/************dialog**************/
+.dialog-title{
+    line-height:40px;padding-left:20px; height:40px; background-color:#233050;
+}
+/************debug***************/
+.bl3{border-left:3px solid #ff4530}
+.bb2{border-bottom:2px solid #4e61d4}
+.params-headers-table input, .table-input{font-size:12px!important; border:0px!important;padding:2px 5px!important;height:25px!important;}
+.params-headers-table td{padding:2px!important}
+/************popup***************/
+.title {
+    margin-top: 0;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 21px;
+    position: relative;
+}
+.title:after {
+    content: "";
+    width: 90px;
+    height: 1px;
+    background: #4e61d4;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+}
+#historys div, .panel-body div {
+    border-bottom:1px solid #f5f5f5;
+    color:#495057;
+    height:36px;
+    font-size: 12px;
+    line-height: 40px;
+    padding-left:20px;
+    overflow: hidden;
+    word-break: break-all;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+.panel-body div:hover{
+    background-color:#4e61d4;
+    color:#ffffff;
+}
+.more{
+    text-align:center;
+    right:0px;
+    position:absolute;
+    top:0px;
+    right:0px;
+    height:100%;
+}
+.more:hover{
+    color:#ffffff;
+    background-color:#4e61d4;
+}
+.more i{width:20px;}
+.more span{display:none;right:20px;background-color:#4e61d4!important; height:100%;float:right; }
+.panel-body .more span{margin-top: -3px;}
+.more span i{width:35px; border-right:1px solid #4e61d4;height:100%;margin-top:0px;}
+.more:hover > span{display:block!important;}
+.more span i:hover{background-color:#4f3479;}
+#modules .interface-menu:hover{background-color:#ff4530!important}
+
+/***************** evn ***********************/
+.env-list-menu{
+    position: relative;
+    height:40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eeeeee;
+    padding-left:20px;
+    cursor: pointer;
+    padding-right: 60px;
+    overflow: hidden;
+}
+.env-list-menu:hover{
+    background-color: #4e61d4;
+    color: #ffffff;
+}
+.delete-env,.edit-env{
+    width:30px;
+    text-align: center;
+    height:100%;
+    float: right;
+    color:#ff4530;
+    right: 0px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.edit-env{
+    right: 30px!important;
+}
+.delete-env:hover, .edit-env:hover{
+    color:#ffffff;
+    background-color:#ff4530;
+}
+#env-variable-table tr td:first-child{
+    width: 300px;
+}
+#env-variable-table tr td{
+    padding-left:20px;
+    padding-right: 20px;
+    padding-top:10px;
+    padding-bottom:10px;
+
+}
+/*****************加载浮层***************************/
+.folat{
+    display:none;
+    position:fixed;top:0px;left:0px;right:0px;bottom:0px;
+    z-index:100;
+    background: rgba(0, 0, 0, 0.3);
+    padding-top:20%; text-align:center;
+}
+.look-up {
+    position: absolute;
+    top: 40%;
+    left: 35%;
+    background: #000000;
+    background: rgba(0, 0, 0, 0.2);
+    display: none;
+    color: #fff;
+    z-index: 1051;
+    background-color: #ffffff;
+}
+.look-up-content {
+    position: relative;
+    background: #FDFDFD;
+    width: 100%;
+    height: 100%;
+    padding-top: 15px;
+    overflow: auto;
+}
+.look-up .i-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    color:#999;
+}
+.tip-div{
+    text-align: center;
+    overflow: hidden;
+    padding: 5px 20px;
+    line-height: 22px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    position: fixed;
+    top:50%;
+    left:50%;
+    display:none;
+    z-index: 1061;
+    font-size:12px;
+}
+.text-error {
+    border: 1px solid red;
+    text-align: center;
+    background: #ffebe8;
+    color: #333333;
+}
+.text-success {
+    border: 1px solid green;
+    text-align: center;
+    background: #c1e2b3;
+    color: #333333;
+}
+/*************loading************/
+.sk-wave .sk-rect {
+    background-color: #4e61d4;
+}
+.sk-wave {
+    margin: 40px auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px; }
+.sk-wave .sk-rect {
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-waveStretchDelay 1.2s infinite ease-in-out;
+    animation: sk-waveStretchDelay 1.2s infinite ease-in-out; }
+.sk-wave .sk-rect1 {
+    -webkit-animation-delay: -1.2s;
+    animation-delay: -1.2s; }
+.sk-wave .sk-rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s; }
+.sk-wave .sk-rect3 {
+    -webkit-animation-delay: -1s;
+    animation-delay: -1s; }
+.sk-wave .sk-rect4 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s; }
+.sk-wave .sk-rect5 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s; }
+
+@-webkit-keyframes sk-waveStretchDelay {
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4);
+        transform: scaleY(0.4); }
+    20% {
+        -webkit-transform: scaleY(1);
+        transform: scaleY(1); } }
+
+@keyframes sk-waveStretchDelay {
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4);
+        transform: scaleY(0.4); }
+    20% {
+        -webkit-transform: scaleY(1);
+        transform: scaleY(1); } }
+/****************字体*********************/
+body, h1, h2, h3, h4, h5, h6, hr, blockquote, dl, dt, dd, ul, ol, li,
+pre, form, fieldset, legend, button, input, textarea, th, td {
+    font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+}
+

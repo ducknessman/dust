@@ -1,0 +1,16 @@
+peewee
+pymysql
+flask
+flask-script
+flask-wtf
+flask-login
+xlrd
+xlwt
+simplejson
+flask-bootstrap
+flask-sqlalchemy
+aiohttp
+pillow
+pycryptodome
+pyecharts
+requests

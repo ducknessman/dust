@@ -1,0 +1,82 @@
+{
+    "help":"Help Doc",
+    "interfaceName":"Interface Name",
+    "interfaceNameTip":"Please input interface name",
+    "moduleNameTip":"Please input module name",
+    "module":"Module",
+    "moduleName":"Module Name",
+    "saveModuleTip":"Save to exist module/folder",
+    "newModuleTip":"Or create new module/folder",
+    "save":"Save",
+    "saveAs":"Save As",
+    "renameModule":"Rename Module",
+    "interfaceDebug":"Debug Interface",
+    "jsonTool":"Json Tool",
+    "officialWebsite":"Official Website",
+    "setting":"Setting (系统设置)",
+    "login":"Login",
+    "loginAndIco":"Login →",
+    "registerAndIco":"Register →",
+    "inputJsonTip":"Please input json",
+    "submit":"Submit",
+    "tip":"Tips:",
+    "env":{
+        "addEnv":"Add Environment",
+        "envVariable":"Unselected environment",
+        "envList":"Environment list",
+        "manageEnvVariable":"Manage environment variable",
+        "envName":"Environment name",
+        "envVarList":"Environment Variable List",
+        "varTip1":"1. Environment Variable can used in url,params,header. For Example:{{variable}}"
+    },
+    "head" :{
+        "title":"Crap | Http Test Plug"
+    },
+    "nav":{
+        "menu":"Left Menu",
+        "loginOut":"Logout",
+        "clearLocal":"Clear Local Data",
+        "newTab":"New Tab",
+        "newInterface":"New Interface",
+        "sync":"Sync Data"
+    },
+    "left":{
+        "history":"History"
+    },
+    "right":{
+        "interfaceUrl":"Please input interface url",
+        "send":"Send",
+        "header":"Header",
+        "param":"Param",
+        "batchEdit":"Batch Edit",
+        "singleEdit":"Single Edit",
+        "custom":"Custom",
+        "responseBody":"Response Body",
+        "responseCookie":"Response Cookie",
+        "responseHeader":"Response Header"
+    },
+    "json":{
+        "row":"Row",
+        "pretty":"Pretty",
+        "expand":"Expand",
+        "collapseOne":"Collapse One Level",
+        "collapseTwo":"Collapse Two Level",
+        "collapseThree":"Collapse Three Level",
+        "collapseFour":"Collapse Four Level",
+        "nl2br":"Nl2br",
+        "help":"Help Doc"
+    },
+    "response":{
+        "responseTip":"Hit the [Send] button to get a response",
+        "responseHelp":"Click this to get help"
+    },
+    "set":{
+        "language":"Plug Language(语言)",
+        "serviceUrl":"Remote Service Url",
+        "timeout":"Http Timeout",
+        "inputServiceUrlTip":"Please input remote service website url",
+        "defServiceUrlTip":"Default Service Url : http://api.crap.cn",
+        "inputTimeoutTip":"Please input http timeout (ms)",
+        "defTimeoutTip":"Default timeout — 10000(ms)"
+    }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ApiDebug-Json工具</title>
+	<link href="../static/postman/source/base.css" rel="stylesheet" type="text/css" />
+	<link href="../static/postman/source/tools/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link href="../static/postman/source/plug.css" rel="stylesheet" type="text/css" />
+	<link href="../static/postman/source/tools/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="../static/postman/source/tools/jquery.jsonview.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="BGF5">
+	<input id="id-page-name" type="hidden" value="json">
+	<div class="h50 CFFF pl20 w shadow fixed z10 pt5" style="background:#233050;">
+		<button class="btn btn-menu btn-adorn btn-sm fl mr10 mt5 cursor ml20">
+			<i class="iconfont mr5 mt-1">&#xe600;</i>
+			<span data-i18n="jsonTool">Json工具</span>
+		</button>
+		<li>
+			<a href="{{url_for('main.method_index')}}" target="_self" class="btn btn-menu btn-sm btn-main fr mr10 mt5">返回主页</a>
+		</li>
+	</div>
+
+	<!--response-menu-->
+	<div class="response-body p10 pb0 pt60">
+		<div class="btn-group" role="group">
+			<button type="button" class="response-menu btn btn-default btn-xs" id="format-row" data-i18n="json.row">原始返回</button>
+			<button type="button" class="response-menu btn btn-default btn-xs" id="format-pretty" data-i18n="json.pretty">格式化</button>
+		</div>
+
+		&nbsp;&nbsp;&nbsp;&nbsp;Json:
+		<div class="btn-group" role="group">
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" id="json-expand" crap-data-name="expand" crap-data-value="1" data-i18n="json.expand">全部展开</button>
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" crap-data-name="collapse" crap-data-value="1" data-i18n="json.collapseOne">展开一级</button>
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" crap-data-name="collapse" crap-data-value="2" data-i18n="json.collapseTwo">展开二级</button>
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" crap-data-name="collapse" crap-data-value="3" data-i18n="json.collapseThree">展开三级</button>
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" crap-data-name="collapse" crap-data-value="4" data-i18n="json.collapseFour">展开四级</button>
+			<button type="button" class="response-menu response-json btn btn-default btn-xs" crap-data-name="nl2br" crap-data-value="true" data-i18n="json.nl2br">自动换行</button>
+		</div>
+
+	</div>
+	<!--response-menu:end-->
+
+
+	<div class="w min-w900 response-body p10">
+			<!--row-->
+            <textarea id="response-row" class="form-control w h BGFFF min-h500" data-i18n="[placeholder]inputJsonTip"></textarea>
+
+			<!--jsonView-->
+			<div id="response-pretty" class="b1 r5 p10 min-h400 BGFFF none">
+				<div class="tc C999">
+					<a class="cursor C999" target="_blank" href="http://api.crap.cn/index.do#/ffff-1492933619469-1017019456-0016/article/list/ffff-1492933630999-1017019456-0017/ARTICLE/%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/NULL"><i class="iconfont">&#xe6a3;</i> Click this to get help</a>
+				</div>
+			</div>
+	</div>
+
+	<script src="../static/postman/source/constant.js"></script>
+	<script src="../static/postman/source/tools/jquery-1.9.1.min.js"></script>
+	<script src="../static/postman/source/tools/i18next-1.11.2.min.js"></script>
+	<script src="../static/postman/source/tools/bootstrap.js"></script>
+	<script src="../static/postman/source/base-dao.js"></script>
+	<script src="../static/postman/source/interface-dao.js"></script>
+	<script src="../static/postman/source/module-dao.js"></script>
+	<script src="../static/postman/source/plug-function.js"></script>
+	<script src="../static/postman/source/crapApi.js"></script>
+	<script src="../static/postman/source/tools/jquery.jsonview.js"></script>
+	<script src="../static/postman/source/json.js"></script>
+	<script type="text/javascript" src="../static/postman/source/tools/jquery-ui.min.js"></script>
+</body>
+</html>

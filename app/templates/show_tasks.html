@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}用例查询{% endblock %}
+{% block navbar %}
+<section class="content-header">
+    <h1>用例展示</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">用例管理</li>
+        <li class="active">用例展示</li>
+    </ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        {% include 'message.html' %}
+    </div>
+
+    <div class="box-body">
+        {% if form %}
+        <div class="row">
+            <div class="col-sm-6">
+                <a class='fa fa-lg fa-edit text-light-blue' href='{{ url_for("main.upload_index") }}'>上传用例</a>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-bordered">
+                <tr>
+                    <th>ID</th>
+                    <th>用例编号</th>
+                    <th>用例子编号</th>
+                    <th>url</th>
+                    <th>method</th>
+                    <th>用例名称</th>
+                    <th>请求数据</th>
+                    <th>执行人</th>
+                    <th>预期结果</th>
+                    <th>编辑</th>
+                    <th>删除</th>
+                </tr>
+                {% for row in form.content %}
+                <tr>
+                    <td>{{row.id}}</td>
+                    <td>{{row.task_id}}</td>
+                    <td>{{row.task_son_id}}</td>
+                    <td>{{row.task_url}}</td>
+                    <td>{{row.task_method}}</td>
+                    <td>{{row.task_name}}</td>
+                    <td>{{row.task_data}}</td>
+                    <td>{{row.auth_name}}</td>
+                    <td>{{row.task_future_result}}</td>
+                    <td><a class='fa fa-lg fa-edit text-light-blue' href='{{ url_for("main.edit_tasks", id=row.id) }}'></a></td>
+                    <td><a class='fa fa-lg fa-warning text-red' href='?action=del&id={{row.id}}'></a></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="box-footer clearfix">
+        {% if form %}
+        <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="#">&laquo;</a></li>
+            {% for i in range(1, form.total_page + 1) %}
+            {% if i == form.page %}
+            <li><a href="?page={{i}}"><b>{{i}}</b></a></li>
+            {% else %}
+            <li><a href="?page={{i}}">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        $('.status').bootstrapSwitch();
+        $(".status").on("switchChange.bootstrapSwitch", function (event, state) {
+            switchStatus($(this).data("id"), state, this);
+        });
+    }
+
+</script>
+{% endblock %}
