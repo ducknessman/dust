@@ -45,4 +45,4 @@ class SingleRequest():
         try:
             return response.json()
         except Exception as e:
-            return {'code':response.status_code,'result':response.text,'error':e}
+            return {'code':response.status_code,'result':response.text[:200],'error':e}
