@@ -1,0 +1,338 @@
+{% include "common_header.html" %}
+<title>{% block title %}测试用例展示{% endblock %}</title>
+{% block header %}{% endblock %}
+
+<style>
+    /*实现隐藏功能*/
+.newsInfo:hover {
+    background: #eee;
+    color: #333;
+    z-index: 999;
+}
+.newsInfo {
+
+    position: relative;
+    z-index: 0;
+}
+.newsInfo span {
+
+    display: none;
+}
+.newsInfo:hover span {
+    display: block;
+    position: absolute;
+    min-width:400px;
+    top: 28px;
+    left:100px;
+    border: 1px solid #cccccc;
+    background: #C1CDC1;
+    color: black;
+    padding: 5px;
+    text-align: left;
+    overflow: hidden;
+}
+.newInfoTruncation {
+    width:120px;
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+</style>
+
+<html>
+<body>
+
+<!--<h1>{% block page_title %}测试用例展示{% endblock %}</h1>-->
+
+{% block main_content %}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 用例管理
+    <span class="c-gray en">&gt;</span> 测试用例展示
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+
+<div class="page-container">
+	<div class="text-c">
+		<div class="Huiform">
+			<input type="text" class="input-text" style="width:250px" placeholder="用例名称或用例id" id="search_key" name="search_key">
+			<button type="submit" class="btn btn-success" id="do_search" name="do_search" >
+                <i class="Hui-iconfont">&#xe665;</i> 搜索用例名称
+            </button>
+		</div>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+                <i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+            </a>
+            <a href="javascript:;" onclick="admin_permission_add('添加测试用例','{{url_for('admin.list_add')}}','','310')" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加测试用例
+            </a>
+            <a href="{{url_for('admin.upload')}}" class="btn btn-success radius">
+                <i class="Hui-iconfont">&#xe642;</i> 用例上传
+            </a>
+
+            <a href="javascript:;" onclick="runningtask()" class="btn btn-secondary radius">
+                <i class="Hui-iconfont">&#xe64d;</i> 执行用例
+            </a>
+
+        </span>
+        <span class="r">共有数据：<strong>{{ paginate.total }}</strong> 条</span>
+    </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="12">测试用例展示</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th>ID</th>
+				<th>用例编号</th>
+				<th>用例名称</th>
+                <th>用例描述</th>
+                <th>请求方式</th>
+                <th>请求地址</th>
+                <th>请求参数</th>
+                <th>录入人</th>
+                <th>预期结果</th>
+                <th>录入时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		    {% for task in tasks %}
+			<tr class="text-c">
+				<td><input type="checkbox" value="{{task.id}}" name="smallBox" id="smallBox"></td>
+				<td>{{task.id}}</td>
+				<td>{{task.task_id}}_{{task.task_son_id}}</td>
+				<td>{{task.task_name}}</td>
+                <td>{{task.task_description}}</td>
+                <td>{{task.task_method}}</td>
+                <td>{{task.task_url}}</td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation">{{task.task_data}}</div>
+                        <span>{{task.task_data}}</span>
+                    </a>
+                </td>
+                <td>{{task.task_auth}}</td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation">{{task.task_result}}</div>
+                        <span>{{task.task_result}}</span>
+                    </a>
+                </td>
+                <td>{{task.task_time}}</td>
+				<td>
+                    <a type="button" title="编辑" href="javascript:;" onclick="admin_permission_edit('用例编辑','{{url_for('admin.list_edit',id=task.id)}}','{{task.id}}','','310')" class="ml-5" style="text-decoration:none">
+                        <i class="Hui-iconfont">&#xe6df;</i>
+                    </a>
+                    <a title="删除" href="javascript:;" onclick="admin_permission_del(this,id='{{task.id}}')" class="ml-5" style="text-decoration:none">
+                        <i class="Hui-iconfont">&#xe6e2;</i>
+                    </a>
+                </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<!--_分页开始-->
+    <div class="dataTables_wrapper">
+	    <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">共{{paginate.pages}}页 </div>
+
+        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_show") }}?page=1' >首页</a>
+            <!--_如果有上一页-->
+            {% if paginate.has_prev %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_show") }}?page={{ paginate.prev_num }}' >上一页</a>
+            {% else %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href="#" >上一页</a>
+            {% endif %}
+
+            <span>
+                <a class="paginate_button current" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">{{paginate.page}}</a>
+            </span>
+
+            {% if paginate.has_next %}
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_show") }}?page={{ paginate.next_num }}'>下一页</a>
+
+		    {% else %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href="#">下一页</a>
+
+            {% endif %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_show") }}?page={{ paginate.pages }}'>尾页</a>
+
+		</div>
+
+	<!--_分页结束-->
+    </div>
+</div>
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+
+<script type="text/javascript">
+    /*搜索*/
+    $(document).ready(function () {
+        $("#do_search").click(function(){
+         var key=$("#search_key").val();
+           location.href="{{url_for('admin.list_search')}}?page={{paginate.page}}&key=" +key;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    /*
+        参数解释：
+        title	标题
+        url		请求的url
+        id		需要操作的数据id
+        w		弹出层宽度（缺省调默认值）
+        h		弹出层高度（缺省调默认值）
+    */
+    /*管理员-权限-添加*/
+    function admin_permission_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+
+    /*管理员-权限-编辑*/
+    function admin_permission_edit(title,url,id,w,h){
+        $.ajax({
+                type: 'GET',
+                url: "{{ url_for('admin.list_edit') }}",
+                data : {　　　　　　　　　　　
+    　　　　　　　　id :id,                             　
+    　　　　　　},
+                success: function(data){
+
+                },
+                error:function(data) {
+
+                },
+            });
+
+        layer_show(title,url,w,h);
+    }
+
+    /*管理员-权限-删除*/
+    function admin_permission_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('admin.list_single_del') }}",
+                dataType: 'json',
+                data : {　　　　　　　　　　　
+    　　　　　　　　id :id,                             　
+    　　　　　　},
+                success: function(data){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+
+    /*管理员-权限-批量删除*/
+    function datadel(){
+        layer.confirm('确认要删除吗？',function(index){
+            if($("input[name=smallBox]:checked").length==0){
+            alert("请必须选择一项" );
+            }
+            else{
+            var params = "";
+         //拼接参数开始
+         $("input[name=smallBox]:checked").each(function(index,element){
+          //第一个id不需要加前缀
+          if(index == 0) {
+              //params += "id=" +
+              params += "" +
+            $(this).val();
+          } else {
+           //params += "&id=" +
+           params += "," +
+            $(this).val();
+          }
+         });//拼接参数完成
+         //alert("生成的拼接参数：" + params);
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('admin.list_all_del') }}",
+                dataType: 'json',
+                data : {　　　　　　　　　　　
+    　　　　　　　　id :params,                             　
+    　　　　　　},
+                success: function(data){
+                    layer.msg('已删除!',{icon:1,time:1000});
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+    }
+        });
+
+    }
+
+    /*执行的用例*/
+    function runningtask(){
+        layer.confirm('请再次确认需要执行的用例？',function(index){
+            if($("input[name=smallBox]:checked").length==0){
+            alert("请必须选择一项" );
+            }
+            else{
+            var params = "";
+         //拼接参数开始
+         $("input[name=smallBox]:checked").each(function(index,element){
+          //第一个id不需要加前缀
+          if(index == 0) {
+              //params += "id=" +
+              params += "" +
+            $(this).val();
+          } else {
+           //params += "&id=" +
+           params += "," +
+            $(this).val();
+          }
+         });//拼接参数完成
+                // alert("生成的拼接参数：" + params);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ url_for('admin.running_task') }}",
+                    dataType: 'json',
+                    data : {　　　　　　　　　　　
+        　　　　　　　　id :params,                             　
+        　　　　　　},
+                    success: function(data){
+                        layer.msg('执行成功!',{icon:1,time:1000});
+                    },
+                    error:function(data) {
+                        console.log(data.msg);
+                    },
+                });
+        }
+        });
+    }
+
+</script>
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% include "common_header.html" %}
+<title>{% block title %}{% endblock %}</title>
+{% block header %}{% endblock %}
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+</head>
+<body>
+{% block head %}{% endblock %}
+
+<h1>{% block page_title %}{% endblock %}</h1>
+
+{% block main_content %}{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% include "common_header.html" %}
+<title>{% block title %}测试模板展示{% endblock %}</title>
+{% block header %}{% endblock %}
+
+{% block main_content %}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 用例管理
+    <span class="c-gray en">&gt;</span> 测试模板展示
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+
+<div class="page-container">
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="12">测试模板展示</th>
+			</tr>
+			<tr class="text-c">
+				<th>task_id</th>
+				<th>task_son_id</th>
+                <th>task_url</th>
+                <th>task_method</th>
+                <th>task_name</th>
+				<th>task_description</th>
+				<th>task_data</th>
+                <th>task_auth</th>
+                <th>task_result</th>
+                <th>task_session</th>
+				<th>task_env</th>
+				<th>下载</th>
+			</tr>
+		</thead>
+		<tbody>
+		    {% for task in tasks %}
+			<tr class="text-c">
+				<td>{{task.task_id}}</td>
+				<td>{{task.task_son_id}}</td>
+				<td>{{task.task_url}}</td>
+                <td>{{task.task_method}}</td>
+                <td>{{task.task_name}}</td>
+                <td>{{task.task_description}}</td>
+				<td>{{task.task_data}}</td>
+				<td>{{task.task_auth}}</td>
+				<td>{{task.task_result}}</td>
+                <td>{{task.task_session}}</td>
+                <td>{{task.task_env}}</td>
+				<td>
+                    <a title="下载" href="{{url_for('admin.download',filename='demo.xlsx')}}"  class="ml-5" style="text-decoration:none">
+                        <i class="Hui-iconfont">&#xe640;</i>
+                    </a>
+                </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+</div>
+<div class="footer">
+    <div class="panel panel-default" >
+        <div class="panel-heading">
+            <h3 class="panel-title">Notes</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li><h4>该文本为测试报告样板展示，数据只作为参考</h4>  </li>
+                <li><h4>请注意在书写用例中的task_data和task_result时写成标准的json格式，以免造成不必要的错误。</h4></li>
+                <li style="color: red"><h4>例如：{"code":1},切勿写成 '{"code":1}' 或 {code:1} </h4></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+
+{% endblock %}

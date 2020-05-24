@@ -1,0 +1,103 @@
+{% include "common_header.html" %}
+<title>{% block title %}添加角色{% endblock %}</title>
+{% block header %}{% endblock %}
+
+<body>
+{% block head %}{% endblock %}
+
+<h1>{% block page_title %}添加角色{% endblock %}</h1>
+
+{% block main_content %}
+
+<article class="page-container">
+	<div class="form form-horizontal" id="form-admin-add" >
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>角色名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例子编号" id="name" name="name"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>角色描述：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例子编号" id="description" name="description"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>权限列表：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例名称" id="auths" name="auths"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>添加时间：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例描述" id="add_time" name="add_time"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button id="submit" neme="submit" class="btn btn-primary radius" onclick="danji()" type="submit">提交</button>
+            </div>
+        </div>
+	</div>
+</article>
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--_footer 作为公共模版分离出去-->
+
+<script src="{{ url_for('static',filename='js/jquery/1.9.1/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/layer/2.4/layer.js') }}"></script>
+<script src="{{ url_for('static',filename='js/h-ui/js/H-ui.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/h-ui.admin/js/H-ui.admin.js') }}"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script src="{{ url_for('static',filename='js/My97DatePicker/4.8/WdatePicker.js') }}"></script>
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/laypage/1.2/laypage.js') }}"></script>
+
+<script type="text/javascript">
+    /*从cookie中获取csrf_token*/
+    function danji(){
+        var id = $("#id").val();
+        var name = $("#name").val();
+        var description = $("#description").val();
+        var auths = $("#auths").val();
+        var add_time = $("#add_time").val();
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ url_for('admin.admin_add_permission') }}",
+            // headers: {"X-CSRFToken": getCookie("csrf_token")},
+            data : {
+                id : id,
+                name:name,
+                description:description,
+                auths:auths,
+                add_time:add_time,
+            },
+            success: function(data){
+                if(data.status==200){
+                layer.msg('已添加成功!',{icon:1,time:2000});
+                var index = parent.layer.getFrameIndex(window.name);//关闭窗口
+                setTimeout("parent.layer.closeAll()",1000);  // parent.layer.closeAll()方法有效
+                }
+                else {
+                    layer.msg(data.msg)
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    }
+</script>
+{% endblock %}

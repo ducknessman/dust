@@ -1,117 +1,142 @@
 #！/usr/bin/env python
 #! -*-coding:utf-8 -*-
 #!@Author : zhuxx
-#!@time : 2020/04/16 17:34
+#!@time : 2020/05/06 19:04
 
-from peewee import MySQLDatabase, Model, CharField, BooleanField, IntegerField, SqliteDatabase
-import json
-import random
-from flask_login import UserMixin
-from app import login_manager
-from conf.config import config
+from datetime import datetime
 
-import os
+from exts import db
+from werkzeug.security import generate_password_hash,check_password_hash
 
-cfg = config[os.getenv('FLASK_CONFIG') or 'default']
+# 用户表
+class User(db.Model):
+    '''
+    _password:对内密码
+    password:对外密码
+    '''
+    __tablename__ = 'user'
+    user_id = db.Column(db.Integer,primary_key=True,autoincrement=True) #用户id
+    username = db.Column(db.String(100),nullable=False,unique=True) # 用户名
+    _password = db.Column(db.String(500),nullable=False) # 密码
+    email = db.Column(db.String(100),nullable=False,unique=True) # 邮箱
+    phone = db.Column(db.String(20),unique=True) # 电话
+    fullname = db.Column(db.String(100)) #全称
+    status = db.Column(db.Integer)  # 状态
+    is_super = db.Column(db.SmallInteger)  # 是否为管理员，1为管理员
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  # 所属角色
+    remarks = db.Column(db.String(500))  # 备注
+    reg_time = db.Column(db.DateTime, default=datetime.now) #注册时间
+
+    def __init__(self,username=None,password=None,email=None,phone=None,fullname=None,
+                 status=None,is_super=None,role_id=None,remarks=None,reg_time=None):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.phone = phone
+        self.fullname = fullname
+        self.status = status
+        self.is_super = is_super
+        self.role_id = role_id
+        self.remarks = remarks
+        self.reg_time = reg_time
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self,raw_password):
+        self._password = generate_password_hash(raw_password)
+
+    def check_password(self,raw_password):
+        result = check_password_hash(self.password,raw_password)
+        return result
+
+#测试用例
+class Tasks(db.Model):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True) #记录id
+    task_id = db.Column(db.String(100),nullable=False) #用例编号
+    task_son_id = db.Column(db.String(200),unique=True,nullable=False) #用例子编号
+    task_name = db.Column(db.String(500),nullable=False) # 用例名称
+    task_description = db.Column(db.String(4096),nullable=False) # 用例描述
+    task_url = db.Column(db.String(1024),nullable=False) # 用例地址
+    task_method = db.Column(db.String(100),nullable=False) #请求方法
+    task_data = db.Column(db.String(4096)) # 用例数据
+    task_result = db.Column(db.String(4096),nullable=False) # 预期结果
+    task_session = db.Column(db.Integer,nullable=False) #是否需要session ,0:不需要，1：需要
+    task_auth = db.Column(db.String(1024))  #用例执行人信息
+    task_env = db.Column(db.Integer,nullable=False) #是否需要环境变量，0：不需要，1：stage，2：alpha，3：real
+    task_time = db.Column(db.String(4096)) #添加时间
+
+#测试环境变量
+class Env(db.Model):
+    __tablename__ = 'env'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 记录id
+    env_name = db.Column(db.String(4096),nullable=False) # 环境变量名称
+    env_single = db.Column(db.Integer,nullable=False) #0：不需要，1：stage，2：alpha，3：real
+    env_url = db.Column(db.String(4096),nullable=False) # 环境变量地址
+    description = db.Column(db.String(4096),nullable=False)# 环境描述
+
+#测试报告
+class TaskReport(db.Model):
+    __tablename__ = 'taskreport'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 记录id
+    report_name = db.Column(db.String(4096),nullable=False) # 报告名称
+    success_count = db.Column(db.Integer,nullable=False) # 成功数量
+    fail_count = db.Column(db.Integer,nullable=False) # 失败数量
+    error_account = db.Column(db.Integer,nullable=False) # 错误数量
+    finished_time = db.Column(db.String(100),index=True,default=datetime.now) #生成报告时间
+
+#测试结果
+class TaskResult(db.Model):
+    __tablename__ = 'task_result'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 记录id
+    task_id = db.Column(db.String(100),nullable=False)  # 用例编号
+    task_son_id = db.Column(db.String(100),nullable=False) # 用例子编号
+    task_url = db.Column(db.String(500),nullable=False) # 用例地址
+    task_data = db.Column(db.String(1024)) # 用例数据
+    task_result = db.Column(db.String(2048),nullable=False) #用例结果
+    task_response = db.Column(db.String(4096),nullable=False) # 请求响应结果
+    task_status = db.Column(db.Integer,nullable=False) #0:success,1:fail,2:error
+    finished_time = db.Column(db.String(100),index=True,default=datetime.now) #执行用例结束时间
+
+# 定义角色数据模型
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    name = db.Column(db.String(100), unique=True)  # 名称
+    description = db.Column(db.String(600))  # 角色描述
+    auths = db.Column(db.String(600))  # 权限列表
+    add_time = db.Column(db.String(100), index=True, default=datetime.utcnow)  # 添加时间
+    admins = db.relationship("User", backref='role')
 
 
-# db = MySQLDatabase(host=cfg.DB_HOST, user=cfg.DB_USER, passwd=cfg.DB_PASSWD, database=cfg.DB_DATABASE)
-db = SqliteDatabase('{}/{}'.format(os.path.abspath(os.path.dirname(os.path.dirname(__file__))),'data.sqlite'))
+# 定义权限数据模型
+class Auth(db.Model):
+    __tablename__ = 'auth'
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    name = db.Column(db.String(100),unique=True)  # 名称，不能重复
+    url = db.Column(db.String(255))  # 地址
+    add_time = db.Column(db.String(100), index=True, default=datetime.utcnow)  # 添加时间
 
-class BaseModel(Model):
-    class Meta:
-        database = db
+#管理员登录日志
+class AdminLog(db.Model):
+    __tablename__ = "admin_log"  #定义表名
+    id = db.Column(db.Integer,primary_key=True) #编号
+    #定义外键 db.ForeignKey
+    admin_id = db.Column(db.Integer,db.ForeignKey('user.user_id')) #所属管理员
+    operate = db.Column(db.String(300))  # 操作行为
+    ip = db.Column(db.String(100))  #登录IP
+    time=db.Column(db.String(100))#时间戳
+    add_time = db.Column(db.String(100),index=True,default=datetime.now) #登录时间 ，默认时间
 
-    def __str__(self):
-        r = {}
-        for k in self.__data__.keys():
-            try:
-                r[k] = str(getattr(self, k))
-            except:
-                r[k] = json.dumps(getattr(self, k))
-        # return str(r)
-        return json.dumps(r, ensure_ascii=False)
-
-
-class User(UserMixin, BaseModel):
-    username = CharField()  
-    password = CharField()  
-    fullname = CharField() 
-    email = CharField()  
-    phone = CharField()  
-    status = BooleanField(default=True)  
-    
-class Auth(UserMixin, BaseModel):
-    auth_name = CharField()
-    username = CharField()  
-    password = CharField() 
-    googlecode = CharField()  
-
-
-class Task(BaseModel):
-    task_id = CharField()
-    task_son_id = CharField()
-    task_url = CharField()
-    task_method = CharField()
-    task_name = CharField()
-    task_data = CharField()
-    auth_name = CharField()
-    task_future_result = CharField()
-
-
-class TaskResult(BaseModel):
-    task_id = CharField()
-    task_name = CharField()
-    describe = CharField()
-    response = CharField()
-    running_time = CharField()
-
-
-class Report(BaseModel):
-    task_name = CharField()
-    report_id = CharField()
-    success_count = CharField()
-    fail_count = CharField()
-    error_count = CharField()
-    finish_time = CharField()
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    #User.id == int(user_id)
-    # return User.get(True)
-    return User.get(User.id == int(user_id))
-
-
-
-def create_table():
-    db.connect()
-    db.create_tables([CfgNotify, User,Task,TaskResult,Report,Auth])
-    admin_data = [{'username':'admin','password':'admin',
-                   'fullname':'superadmin','email':'123456@qq.com',
-                   'phone':'123456789','status':0}]
-    # User().insert_many(admin_data).execute()
-    tasks_data = [{'task_id':1,'task_son_id':'1-1','task_url':'http://www.baidu.com','task_method':'GET',
-                   'task_name':'冒烟测试','task_data':"","auth_name":"zhuxx",'task_future_result':'200'},
-                  {'task_id': 1, 'task_son_id': '1-2', 'task_url': 'http://www.baidu.com.123', 'task_method': 'GET',
-                   'task_name': '冒烟测试', 'task_data': "","auth_name":"zhuxx", 'task_future_result': '500'},
-                  {'task_id': 1, 'task_son_id': '1-3', 'task_url': 'https://www.baidu.com', 'task_method': 'GET',
-                   'task_name': '冒烟测试', 'task_data': "","auth_name":"zhuxx", 'task_future_result': '200'},
-                  ]
-    # Task().insert_many(tasks_data).execute()
-    report_data = [{'task_name':"冒烟测试-1",'report_id':"1",'success_count':50,
-                    'fail_count':10,'error_count':3,'finish_time':"2020-04-20 15:20:32"},
-                   {'task_name': "冒烟测试-2", 'report_id': "1", 'success_count': 50,
-                    'fail_count': 10, 'error_count': 3, 'finish_time': "2020-04-20 15:20:32"},
-                   {'task_name': "冒烟测试-3", 'report_id': "1", 'success_count': 50,
-                    'fail_count': 10, 'error_count': 3, 'finish_time': "2020-04-20 15:20:32"}
-                   ]
-    # Report().insert_many(report_data).execute()
-    print('{code:%s,result:%s}'%(random.choice([200,404,301,500]),1))
-    task_result = [{"task_id":"2",'task_name':"冒烟测试-1",'describe':'{code:%s,result:%s}'%(random.choice([200,404,301,500]),i),
-                    'response':'{code:%s,result:%s}'%(random.choice([200,404,301,500]),i),
-                    "running_time":"2020-04-20 15:32:20"} for i in range(87)]
-    TaskResult.insert_many(task_result).execute()
-
-if __name__ == '__main__':
-    create_table()
+#操作日志
+class OperateLog(db.Model):
+    __tablename__ = 'operate_log'
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    # 定义外键 db.ForeignKey
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))  # 所属管理员
+    ip = db.Column(db.String(100))  # 登录IP
+    operate = db.Column(db.String(600))  # 操作行为
+    add_time = db.Column(db.String(100), index=True, default=datetime.now)  # 登录时间 ，默认时间

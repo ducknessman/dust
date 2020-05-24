@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{%  block head %}
+   <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    　<script type="text/javascript" src="{{url_for('static',filename='js/jquery/1.9.1/jquery.min.js')}}"></script>
+    <style>
+        .form_div{
+        width: 400px;
+            padding: 30px 20px;
+           }
+
+      .state1{
+                color:#aaa;
+            }
+            .state2{
+                color:#000;
+            }
+            .state3{
+                color:red;
+            }
+            .state4{
+                color:green;
+            }
+         </style>
+{% endblock %}
+{% block title %}dust-admin - 个人详情页{% endblock %}
+{% block body %}
+{% include 'edit_pwd_details.html' %}
+{% endblock %}
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}

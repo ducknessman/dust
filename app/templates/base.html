@@ -1,233 +1,156 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    {% block head %}{% endblock %}
-    <title>管理平台 | {% block title %}标题{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/font-awesome/css/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/ionicons/css/ionicons.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-slider/slider.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pace/pace.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-switch/bootstrap-switch.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/select2/select2.min.css') }}">
-    {% block css %}{% endblock %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/adminlte/css/AdminLTE.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/adminlte/css/skins/skin-blue.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
-    <!--[if lt IE 9]>
-    <script src="plugins/html5shiv.min.js"></script>
-    <script src="plugins/respond.min.js"></script>
-    <![endif]-->
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="{{url_for('static',filename='/favicon.ico')}}" >
+<link rel="Shortcut Icon" href="{{url_for('static',filename='/favicon.ico')}}" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{{url_for('static',filename='js/html5shiv.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/respond.min.js')}}"></script>
+<![endif]-->
+
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui/css/H-ui.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/css/H-ui.admin.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/Hui-iconfont/1.0.8/iconfont.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/skin/default/skin.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/css/style.css')}}">
+
+
+<!--[if IE 6]>
+<script type="text/javascript" src="{{url_for('static',filename='js/DD_belatedPNG_0.0.8a-min.js')}}"></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+{% block head %}{% endblock %}
+<title>{% block title %}dust - admin{% endblock %}
+
+</title>
+
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
-    <!--头部-->
-    <header class="main-header">
-        <a href="{{ url_for('main.index') }}" class="logo">
-            <span class="logo-mini"><b>A</b></span>
-            <span class="logo-lg"><b>管理平台</b></span>
-        </a>
-        <nav class="navbar navbar-static-top">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ url_for('static', filename='images/avatar.jpg') }}" class="user-image"
-                                 alt="User Image">
-                            <span class="hidden-xs">{{current_user.username}}</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="user-header">
-                                <img src="{{ url_for('static', filename='images/avatar.jpg') }}"
-                                     class="img-circle" alt="User Image">
-                                <p>
-                                    <span>{{current_user.fullname}}</span>
-                                    <small>{{current_user.email}}</small>
-                                </p>
-                            </li>
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="{{ url_for('main.index') }}" class="btn btn-default btn-flat">修改密码</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="{{ url_for('auth.logout') }}" class="btn btn-default btn-flat">退出登录</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <!--侧边栏-->
-    <aside class="main-sidebar">
-        <section class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="header">功能导航</li>
-                <li>
-                    <a href="{{ url_for('main.index') }}">
-                        <i class="fa fa-home"></i>
-                        <span>首页</span>
-                    </a>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-file"></i>
-                        <span>用例管理</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.show_tasks') }}"><i class="fa fa-circle-o"></i>用例展示</a></li>
-                        <li><a href="{{ url_for('main.edit_tasks') }}"><i class="fa fa-circle-o"></i>用例编辑</a></li>
-                        <li><a href="{{ url_for('main.run_task') }}"><i class="fa fa-circle-o"></i>用例执行</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-line-chart"></i>
-                        <span>报告展示</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.show_report') }}"><i class="fa fa-circle-o"></i>报告查询</a></li>
-                        <li><a href="{{ url_for('main.analysis_report') }}"><i class="fa fa-circle-o"></i>报告分析</a></li>
-                    </ul>
-                </li>
+<body>
+<header class="navbar-wrapper">
+	<div class="navbar navbar-fixed-top">
+		<div class="container-fluid cl">
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="{{url_for('admin.index')}}" >Dust</a>
+			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.1</span>
+			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-send"></i>
-                        <span>定时任务</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>定时任务列表</a></li>
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>定时任务添加/修改</a></li>
+		<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+			<ul class="cl">
+				<li class="dropDown dropDown_hover">
+					<a href="#" class="dropDown_A">{{ user.username }} <i class="Hui-iconfont">&#xe6d5;</i></a>
+					<ul class="dropDown-menu menu radius box-shadow">
+						<li><a href="{{ url_for('admin.profile') }}">个人信息</a></li>
+						<li><a href="{{ url_for('admin.editpwd') }}">修改密码</a></li>
+						<li><a href="{{ url_for('login.logout') }}">注销</a></li>
                     </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-bug"></i>
-                        <span>单目调试</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>SinglePost</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-github"></i>
-                        <span>开源小工具</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.method_index') }}"><i class="fa fa-circle-o"></i>开源工具一览</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-folder-open"></i>
-                        <span>业务模块</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>业务模块列表</a></li>
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>模块添加/修改</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-institution"></i>
-                        <span>测试集成</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>持续集成对接列表</a></li>
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>对接fiddle</a></li>
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>压力测试-locust</a></li>
-                        <li><a href="{{ url_for('main.post_man') }}"><i class="fa fa-circle-o"></i>selenium使用</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-cog"></i>
-                        <span>权限管理</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ url_for('main.edit_user') }}"><i class="fa fa-circle-o"></i>编辑权限</a></li>
-                        <li><a href="{{ url_for('main.notifylist') }}"><i class="fa fa-circle-o"></i>用户展示</a></li>
-                        <li><a href="{{ url_for('main.add_user') }}"><i class="fa fa-circle-o"></i>添加用户</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </section>
-    </aside>
-
-    <div class="content-wrapper">
-        <!--导航栏-->
-        {% block navbar %}{% endblock %}
-        <!--正文-->
-        <section class="content">
-            {% block content %}{% endblock %}
-        </section>
-    </div>
-    <!--页脚-->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>版本号</b> 1.0.0
-        </div>
-        Copyright &copy; 2020 <a href="https://www.baidu.com/">Dust-Test</a>
-    </footer>
-    <!--模态窗口-->
-    <div class="modal-wrapper">
-        <div id="alert-modal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提示</h4>
-                    </div>
-                    <div class="modal-body">
-                        提示内容
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left btn-no" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-default btn-yes" data-dismiss="modal">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
+</header>
+<aside class="Hui-aside">
+	<div class="menu_dropdown bk_2">
+		<dl id="menu-article">
+			<dt><i class="Hui-iconfont">&#xe616;</i> 用例管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.list_show')}}" data-title="用例管理" href="javascript:void(0)">用例管理</a></li>
+					<li><a data-href="{{url_for('admin.list_show_report_index')}}" data-title="报告展示" href="javascript:void(0)">报告展示</a></li>
+					<li><a data-href="{{url_for('admin.list_show_result')}}" data-title="测试结果展示" href="javascript:void(0)">测试结果展示</a></li>
+					<li><a data-href="{{url_for('admin.list_task_model')}}" data-title="测试用例模板" href="javascript:void(0)">测试用例模板</a></li>
+                </ul>
+			</dd>
+		</dl>
+    	<dl id="menu-admin">
+			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.admin_permission')}}" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
+					<li><a data-href="{{url_for('admin.admin_role')}}" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
+					<li><a data-href="{{url_for('admin.admin_show_user')}}" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl id="menu-tongji">
+			<dt><i class="Hui-iconfont">&#xe61a;</i> 监控 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.control_index')}}" data-title="系统信息统计" href="javascript:void(0)">系统信息统计</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl id="menu-system">
+			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.logs_login')}}" data-title="登录日志" href="javascript:void(0)">登录日志</a></li>
+					<li><a data-href="system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
+					<li><a data-href="{{url_for('admin.logs_analysis')}}" data-title="sql日志" href="javascript:void(0)">sql日志</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box">
+	<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+		<div class="Hui-tabNav-wp">
+			<ul id="min_title_list" class="acrossTab cl">
+				<li class="active">
+					<span title="欢迎页面" data-href="{{ url_for('admin.welcome') }}">欢迎页面</span>
 
 
-<script src="{{ url_for('static', filename='plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/bootstrap/js/new/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/fastclick/fastclick.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/bootstrap-slider/bootstrap-slider.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/pace/pace.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/bootstrap-switch/bootstrap-switch.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/select2/select2.full.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/adminlte/js/app.min.js') }}"></script>
-{% block scripts %}{% endblock %}
-<script src="{{ url_for('static', filename='js/global.js') }}"></script>
+					<em></em></li>
+		    </ul>
+	    </div>
+		<div class="Hui-tabNav-more btn-group">
+            <a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;">
+                <i class="Hui-iconfont">&#xe6d4;</i>
+            </a>
+            <a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;">
+                <i class="Hui-iconfont">&#xe6d7;</i>
+            </a>
+        </div>
+	</div>
+	<div id="iframe_box" class="Hui-article">
+		<div class="show_iframe">
+			<div style="display:none" class="loading"></div>
+			{% block body %}
+<div>这里是默认内容，所有继承自这个模板的，把您要呈现的内容放在这里。</div>
+{% endblock %}
+
+        {% block footer %}这是footer内容{% endblock %}
+	</div>
+</div>
+</section>
+
+<div class="contextMenu" id="Huiadminmenu">
+	<ul>
+		<li id="closethis">关闭当前 </li>
+		<li id="closeall">关闭全部 </li>
+</ul>
+</div>
+<!--_footer 作为公共模版分离出去-->
+
+
+
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery/1.9.1/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/layer/2.4/layer.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/h-ui/js/H-ui.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/h-ui.admin/js/H-ui.admin.js')}}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery.contextmenu/jquery.contextmenu.r2.js')}}"></script>
+<script type="text/javascript">
+
+</script>
+
+
 </body>
 </html>

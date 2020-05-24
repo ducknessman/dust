@@ -1,0 +1,174 @@
+{% include "common_header.html" %}
+<title>{% block title %}添加用例{% endblock %}</title>
+{% block header %}{% endblock %}
+
+<body>
+{% block head %}{% endblock %}
+
+<h1>{% block page_title %}添加用例{% endblock %}</h1>
+
+{% block main_content %}
+
+<article class="page-container">
+	<div class="form form-horizontal" id="form-admin-add" >
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>用例编号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例编号" id="task_id" name="task_id"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>用例子编号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例子编号" id="task_son_id" name="task_son_id"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>用例名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例名称" id="task_name" name="task_name"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>用例描述：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="用例描述" id="task_description" name="task_description"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>method：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="task_method" id="task_method" name="task_method"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>url：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="url" id="task_url" name="task_url"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>请求数据：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="task_data" name="task_data"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>预期结果：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="" placeholder="权限地址" id="task_result" name="task_result"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>session信息：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off"  value="0" placeholder="session信息" id="task_session" name="task_result"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>session作者：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off"  placeholder="session作者" id="task_auth" name="task_auth"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>环境信息：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="0" placeholder="环境信息" id="task_env" name="task_result"/>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>录入时间：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%m-%d %H:%M:%S\'}' })" id="task_time" class="input-text Wdate" style="width:120px;">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button id="submit" neme="submit" class="btn btn-primary radius" onclick="danji()" type="submit">提交</button>
+            </div>
+        </div>
+	</div>
+</article>
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--_footer 作为公共模版分离出去-->
+
+<script src="{{ url_for('static',filename='js/jquery/1.9.1/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/layer/2.4/layer.js') }}"></script>
+<script src="{{ url_for('static',filename='js/h-ui/js/H-ui.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/h-ui.admin/js/H-ui.admin.js') }}"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script src="{{ url_for('static',filename='js/My97DatePicker/4.8/WdatePicker.js') }}"></script>
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/laypage/1.2/laypage.js') }}"></script>
+
+<script type="text/javascript">
+    /*从cookie中获取csrf_token*/
+    function danji(){
+        var task_id = $("#task_id").val();
+        var task_son_id = $("#task_son_id").val();
+        var task_name = $("#task_name").val();
+        var task_description = $("#task_description").val();
+        var task_method = $("#task_method").val();
+        var task_url = $("#task_url").val();
+        var task_data = $("#task_data").val();
+        var task_result = $("#task_result").val();
+        var task_session = $("#task_session").val();
+        var task_auth = $("#task_auth").val();
+        var task_env = $("#task_env").val();
+        var task_time = $("#task_time").val();
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ url_for('admin.list_add') }}",
+            // headers: {"X-CSRFToken": getCookie("csrf_token")},
+            data : {
+                task_id : task_id,
+                task_son_id:task_son_id,
+                task_name:task_name,
+                task_description:task_description,
+                task_method:task_method,
+                task_url : task_url,
+                task_data: task_data,
+                task_result:task_result,
+                task_session:task_session,
+                task_auth:task_auth,
+                task_env:task_env,
+                task_time:task_time
+            },
+            success: function(data){
+                if(data.status==200){
+                layer.msg('已添加成功!',{icon:1,time:2000});
+                var index = parent.layer.getFrameIndex(window.name);//关闭窗口
+                setTimeout("parent.layer.closeAll()",1000);  // parent.layer.closeAll()方法有效
+                }
+                else {
+                    layer.msg(data.msg)
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    }
+</script>
+{% endblock %}

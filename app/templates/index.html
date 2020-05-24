@@ -1,143 +1,149 @@
-{% extends "base.html" %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="{{url_for('static',filename='/favicon.ico')}}" >
+<link rel="Shortcut Icon" href="{{url_for('static',filename='/favicon.ico')}}" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{{url_for('static',filename='js/html5shiv.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/respond.min.js')}}"></script>
+<![endif]-->
 
-{% block title %}首页{% endblock %}
 
-{% block navbar %}
-<section class="content-header">
-    <h1>首页</h1>
-    <ol class="breadcrumb">
-        <li><i class="fa fa-dashboard"></i> 当前位置</li>
-        <li class="active">首页</li>
-    </ol>
-</section>
-{% endblock %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui/css/H-ui.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/css/H-ui.admin.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/Hui-iconfont/1.0.8/iconfont.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/skin/default/skin.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/h-ui.admin/css/style.css')}}">
 
-{% block content %}
-<div class="box box-primary">
-    <div class="box-body">
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3 id="count01">{{ num1 }}</h3>
-                        <p>用例统计信息</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-ios-gear-outline"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 id="count02">{{ num2 }}</h3>
-                        <p>测试报告数量信息</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-iphone"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 id="count03">{{ num3 }}</h3>
-                        <p>人员统计信息</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3 id="count04">{{ num4 }}%</h3>
-                        <p>成功率统计信息</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="box-body">
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-               <div class="small-box">
-                   <div class="inner">
-                       <div id="bar" style="width:1500px; height:500px;"></div>
-                   </div>
-               </div>
-            </div>
-        </div>
-    </div>
-    <div class="box-footer">
-        <div class="alert alert-info alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h4><i class="icon fa fa-info"></i> 温馨提示</h4>
-            <ol>
-                <li>此项目为临时练手项目，如出现bug请及时联系管理员</li>
-            </ol>
-        </div>
-    </div>
+
+<!--[if IE 6]>
+<script type="text/javascript" src="{{url_for('static',filename='js/DD_belatedPNG_0.0.8a-min.js')}}"></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>dust - admin</title>
+
+</head>
+<body>
+<header class="navbar-wrapper">
+	<div class="navbar navbar-fixed-top">
+		<div class="container-fluid cl">
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="{{url_for('admin.index')}}">Dust</a>
+			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.1</span>
+			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
+
+		<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+			<ul class="cl">
+				<li class="dropDown dropDown_hover">
+					<a href="#" class="dropDown_A">{{ username }} <i class="Hui-iconfont">&#xe6d5;</i></a>
+					<ul class="dropDown-menu menu radius box-shadow">
+						<li><a href="{{ url_for('admin.profile') }}">个人信息</a></li>
+						<li><a href="{{ url_for('admin.editpwd') }}">修改密码</a></li>
+						<li><a href="{{ url_for('login.logout') }}">注销</a></li>
+                    </ul>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
-{% endblock %}
+</header>
+<aside class="Hui-aside">
+	<div class="menu_dropdown bk_2">
+		<dl id="menu-article">
+			<dt><i class="Hui-iconfont">&#xe616;</i> 用例管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.list_show')}}" data-title="用例管理" href="javascript:void(0)">用例管理</a></li>
+					<li><a data-href="{{url_for('admin.list_show_report_index')}}" data-title="报告展示" href="javascript:void(0)">报告展示</a></li>
+					<li><a data-href="{{url_for('admin.list_show_result')}}" data-title="测试结果展示" href="javascript:void(0)">测试结果展示</a></li>
+					<li><a data-href="{{url_for('admin.list_task_model')}}" data-title="测试用例模板" href="javascript:void(0)">测试用例模板</a></li>
+                </ul>
+			</dd>
+		</dl>
+    	<dl id="menu-admin">
+			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.admin_permission')}}" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
+					<li><a data-href="{{url_for('admin.admin_role')}}" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
+					<li><a data-href="{{url_for('admin.admin_show_user')}}" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl id="menu-tongji">
+			<dt><i class="Hui-iconfont">&#xe61a;</i> 监控 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.control_index')}}" data-title="系统信息统计" href="javascript:void(0)">系统信息统计</a></li>
+				</ul>
+			</dd>
+		</dl>
+		<dl id="menu-system">
+			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理 <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a data-href="{{url_for('admin.logs_login')}}" data-title="登录日志" href="javascript:void(0)">登录日志</a></li>
+					<li><a data-href="system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
+					<li><a data-href="{{url_for('admin.logs_analysis')}}" data-title="sql日志" href="javascript:void(0)">sql日志</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box">
+	<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+		<div class="Hui-tabNav-wp">
+			<ul id="min_title_list" class="acrossTab cl">
+				<li class="active">
+					<span title="欢迎页面" data-href="{{ url_for('admin.welcome') }}">欢迎页面</span>
 
-{% block scripts %}
-<script>
-    function initPage() {
-        var jsInObj = null;
-        restTemplate("GET", "/stats/summary", jsInObj, function (jsOutObj) {
-            $("#count01").text(jsOutObj.batch_count);
-            $("#count02").text(jsOutObj.test_count);
-            $("#count03").text(jsOutObj.succ_count);
-            $("#count04").text(jsOutObj.fail_count);
-        });
-    }
+
+					<em></em></li>
+		    </ul>
+	    </div>
+		<div class="Hui-tabNav-more btn-group">
+            <a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;">
+                <i class="Hui-iconfont">&#xe6d4;</i>
+            </a>
+            <a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;">
+                <i class="Hui-iconfont">&#xe6d7;</i>
+            </a>
+        </div>
+    </div>
+	<div id="iframe_box" class="Hui-article">
+		<div class="show_iframe">
+			<div style="display:none" class="loading"></div>
+			<iframe scrolling="yes" frameborder="0" src="{{ url_for('admin.welcome') }}"></iframe>
+	</div>
+</div>
+</section>
+
+<div class="contextMenu" id="Huiadminmenu">
+	<ul>
+		<li id="closethis">关闭当前 </li>
+		<li id="closeall">关闭全部 </li>
+</ul>
+</div>
+<!--_footer 作为公共模版分离出去-->
+
+
+
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery/1.9.1/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/layer/2.4/layer.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/h-ui/js/H-ui.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/h-ui.admin/js/H-ui.admin.js')}}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{{url_for('static',filename='js/jquery.contextmenu/jquery.contextmenu.r2.js')}}"></script>
+<script type="text/javascript">
+
 </script>
-<script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
-<script>
-        var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
-        var old_data1 = [];
-        var old_data2 = [];
-        var old_data3 = [];
-        $(
-            function () {
-                fetchData(chart);
-                setInterval(getDynamicData, 600000);
-            }
-        );
 
-        function fetchData() {
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:5000/lineChart",
-                dataType: "json",
-                success: function (result) {
-                    chart.setOption(result);
-                    old_data1 = chart.getOption().series[0].data;
-                    old_data2 = chart.getOption().series[1].data;
-                    old_data3 = chart.getOption().series[2].data;
-                }
-            });
-        }
 
-        function getDynamicData() {
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:5000/lineDynamicData",
-                dataType: "json",
-                success: function (result) {
-                    old_data1.push([result.name1, result.value1]);
-                    old_data2.push([result.name2, result.value2]);
-                    old_data3.push([result.name3, result.value3]);
-                    chart.setOption({
-                        series: [{data: old_data1},{data: old_data2},{data: old_data3}]
-                    });
-                }
-            });
-        }
-</script>
-{% endblock %}
+</body>
+</html>

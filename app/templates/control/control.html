@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基于psutil的系统监控工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header">
+					<h3>系统CPU跟踪图</h3>
+				</div>
+				<div class="box-body">
+					<div id="cpu" style="width:1500px; height:500px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header">
+					<h3>系统memory跟踪图</h3>
+                    <div class="col-sm-5 user">
+                        <ul class="list-group" style="padding-left:100px;padding-top:50px">
+                            <li class="list-group-item list-group-item-success">内存大小：<span class="badge" id="mtotal"></span></li>
+                            <li class="list-group-item list-group-item-info">内存已使用大小：<span class="badge" id="mused"></span></li>
+                            <li class="list-group-item list-group-item-warning">内存剩余大小：<span class="badge" id="mfree"></span></li>
+                            <li class="list-group-item list-group-item-success">交换区大小：<span class="badge" id="stotal"></span></li>
+                            <li class="list-group-item list-group-item-info">交换区已使用大小：<span class="badge" id="sused"></span></li>
+                            <li class="list-group-item list-group-item-warning">交换区剩余大小：<span class="badge" id="sfree"></span></li>
+                        </ul>
+                    </div>
+					<div class="col-sm-7 user" style="">
+                            <div id="memory" style="width:800px; height:400px;padding-top: 40px;margin-left: -100px;margin-right: auto"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header">
+					<h3>系统netio跟踪图</h3>
+				</div>
+				<div class="box-body">
+					<div id="netio" style="width:1500px; height:500px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header">
+					<h3>系统disk跟踪图</h3>
+                    <div class="col-sm-5 user">
+                        <ul class="list-group" style="padding-left:200px;padding-top:50px">
+                            <li class="list-group-item list-group-item-success">磁盘容量：<span class="badge" id="total"></span></li>
+                            <li class="list-group-item list-group-item-info">已使用容量：<span class="badge" id="used"></span></li>
+                            <li class="list-group-item list-group-item-warning">空闲容量：<span class="badge" id="free"></span></li>
+                        </ul>
+                    </div>
+				</div>
+				<div class="box-body">
+					<div id="disk" style="width:1500px; height:500px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript" src="{{url_for('static',filename='js/echarts.min.js')}}"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>-->
+<script type="text/javascript" src="{{url_for('static',filename='js/control/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/control/bootstrap.min.js')}}"></script>
+<script>
+    var chart = echarts.init(document.getElementById('cpu'), 'white', {renderer: 'canvas'});
+    var memory = echarts.init(document.getElementById('memory'), 'white', {renderer: 'canvas'});
+    var netio = echarts.init(document.getElementById('netio'), 'white', {renderer: 'canvas'});
+    var disk = echarts.init(document.getElementById('disk'), 'white', {renderer: 'canvas'});
+
+    $(
+        function () {
+            fetchData(chart);
+            setInterval(fetchData, 2000);
+            fetchMemoryData(memory);
+            setInterval(fetchMemoryData, 2000);
+            fetchNetioData(netio);
+            setInterval(fetchNetioData, 2000);
+            fetchDiskData(disk);
+            setInterval(fetchDiskData, 2000);
+        },
+        $('#myTabs a').click(function (e) {
+          e.preventDefault();
+          $(this).tab('show')
+        })
+    );
+
+    function fetchData() {
+        $.ajax({
+            type: "GET",
+            url: "{{url_for('admin.get_cpu_chart')}}",
+            dataType: 'json',
+            success: function (result) {
+                chart.setOption(result);
+            }
+        });
+    }
+
+    function fetchMemoryData() {
+        $.ajax({
+            type: "GET",
+            url: "{{url_for('admin.get_memory_chart')}}",
+            dataType: 'json',
+            success: function (result) {
+                memory.setOption(JSON.parse(result.liquid));
+                $('#mtotal').html((result.mtotal/1024/1024/1024).toFixed(2) + 'G');
+                $('#mused').html((result.mused/1024/1024/1024).toFixed(2) + 'G');
+                $('#mfree').html((result.mfree/1024/1024/1024).toFixed(2) + 'G');
+                $('#stotal').html((result.stotal/1024/1024/1024).toFixed(2) + 'G');
+                $('#sused').html((result.sused/1024/1024/1024).toFixed(2) + 'G');
+                $('#sfree').html((result.sfree/1024/1024/1024).toFixed(2) + 'G');
+            }
+        });
+    }
+    function fetchNetioData() {
+        $.ajax({
+            type: "GET",
+            url: "{{url_for('admin.get_net_io_chart')}}",
+            dataType: 'json',
+            success: function (result) {
+                netio.setOption(result);
+            }
+        });
+    }
+    function fetchDiskData() {
+        $.ajax({
+            type: "GET",
+            url: "{{url_for('admin.get_disk_chart')}}",
+            dataType: 'json',
+            success: function (result) {
+                disk.setOption(JSON.parse(result.line));
+                $('#total').html((result.total/1000000000).toFixed(2) + 'G');
+                $('#used').html((result.used/1000000000).toFixed(2) + 'G');
+                $('#free').html((result.free/1000000000).toFixed(2) + 'G');
+            }
+        });
+    }
+</script>
+</body>
+</html>

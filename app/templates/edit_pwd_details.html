@@ -1,0 +1,85 @@
+ <script>
+ $(function() {
+                var checkok1=false;
+                var checkok2=false;
+                var checkok3=false;
+ //验证旧密码
+     $("input[name='oldpwd']").blur(function () {
+             var pwd=$("input[name='oldpwd']").val();
+             var dd = {'oldpwd':pwd};
+               $.ajax({
+             type: "GET",
+             url: "{{ url_for('admin.checkpwd') }}",
+             dataType: "json",
+             data: dd,
+             success: function(json) {
+                 if(json.status==11){
+                      $("#oldpwd").next().text('密码正确').removeClass('state1').addClass('state3');
+                      checkok1=1;
+                 }
+                 else {
+                      $("#oldpwd").next().text('密码不对').removeClass('state1').addClass('state4');
+                 }
+             },
+
+         });
+     });
+	 //验证新密码
+          $('input[name="newpwd1"]').focus(function(){
+                    $("#newpwd1").next().text('密码应该为6-15位之间').removeClass('state1').addClass('state2');
+                }).blur(function(){
+                    if($("#newpwd1").val().length >= 6 && $(this).val().length <=15 && $(this).val()!=''){
+                        $("#newpwd1").next().text('输入有效').removeClass('state1').addClass('state4');
+                        checkok2=true;
+                    }else{
+                        $("#newpwd1").next().text('密码应该为6-20位之间').removeClass('state1').addClass('state3');
+                    }
+                     
+                });
+	   //再次验证新密码
+                    $('input[name="newpwd2"]').focus(function(){
+                    $(this).next().text('两次输入密码需要一样').removeClass('state1').addClass('state2');
+                }).blur(function(){
+                    if($(this).val().length >= 6 && $(this).val().length <=15 && $(this).val()!='' && $(this).val() == $('input[name="newpwd2"]').val()){
+                        $(this).next().text('输入成功').removeClass('state1').addClass('state4');
+                        checkok3=true;
+                    }else{
+                        $(this).next().text('您输入的两次密码不一样哦').removeClass('state1').addClass('state3');
+                    }
+
+                });
+          //提交按钮,所有验证通过方可提交
+                 $('#button_1').click(function(){
+            if(checkok1 && checkok2 && checkok3){
+                        $('form').submit();
+                    }else{
+                        return false;
+                    }
+        });
+ })
+
+ </script>
+<div class="container">
+    <div class="form_div">
+      <form action="{{ url_for('admin.editpwd') }}" class="form-signin" role="form" method='post'>
+        <h2 class="form-signin-heading">修改密码</h2>
+        <input type="password" class="form-control" placeholder="请输入旧密码" required autofocus name="oldpwd" id="oldpwd">
+          <span class='state1'>请输入旧密码</span>
+            <div style="height:10px;clear:both;display:block"></div>
+        <input type="password" class="form-control" placeholder="请输入新密码" required name="newpwd1" id="newpwd1">
+		 <span class='state1'>请输入新密码</span>
+          <div style="height:10px;clear:both;display:block"></div>
+       <input type="password" class="form-control" placeholder="请再次输入新密码" required name="newpwd2" id="newpwd2">
+	    <span class='state1'>请再次输入新密码</span>
+            <div style="height:10px;clear:both;display:block"></div>
+        <div class="form-group">
+                <button type="button" class="btn btn-primary" id="button_1">提交修改</button>
+            </div>
+          <div style="height:10px;clear:both;display:block"></div>
+      </form>
+        {% if  message %}
+            <p style="color:red">{{ message }} </p>
+        {% endif %}
+        </div>
+    </div>
+

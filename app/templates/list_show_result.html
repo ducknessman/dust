@@ -1,0 +1,178 @@
+{% include "common_header.html" %}
+
+
+<style>
+    /*实现隐藏功能*/
+.newsInfo:hover {
+    background: #eee;
+    color: #333;
+    z-index: 999;
+}
+.newsInfo {
+
+    position: relative;
+    z-index: 0;
+}
+.newsInfo span {
+
+    display: none;
+}
+.newsInfo:hover span {
+    display: block;
+    position: absolute;
+    min-width:400px;
+    top: 28px;
+    left:100px;
+    border: 1px solid #cccccc;
+    background: #C1CDC1;
+    color: black;
+    padding: 5px;
+    text-align: left;
+    overflow: hidden;
+}
+.newInfoTruncation {
+    width:120px;
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+</style>
+
+<title>{% block title %}测试结果展示{% endblock %}</title>
+{% block header %}{% endblock %}
+
+<html>
+<body>
+
+<!--<h1>{% block page_title %}测试用例展示{% endblock %}</h1>-->
+
+{% block main_content %}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 用例管理
+    <span class="c-gray en">&gt;</span> 测试结果展示
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+
+<div class="page-container">
+	<div class="text-c">
+		<div class="Huiform">
+			<input type="text" class="input-text" style="width:250px" placeholder="用例编号或子编号" id="search_key" name="search_key">
+			<button type="submit" class="btn btn-success" id="do_search" name="do_search" >
+                <i class="Hui-iconfont">&#xe665;</i> 搜索用例名称
+            </button>
+		</div>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="r">共有数据：<strong>{{ paginate.total }}</strong> 条</span>
+    </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="11">测试用例展示</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th>ID</th>
+				<th>用例编号</th>
+                <th>用例子编号</th>
+                <th>请求地址</th>
+                <th>请求参数</th>
+                <th>预期结果</th>
+                <th>实际结果</th>
+                <th>状态</th>
+                <th>运行时间</th>
+			</tr>
+		</thead>
+		<tbody>
+		    {% for task in tasks %}
+			<tr class="text-c">
+				<td><input type="checkbox" value="{{task.id}}" name="smallBox" id="smallBox"></td>
+				<td>{{task.id}}</td>
+				<td>{{task.task_id}}</td>
+				<td>{{task.task_son_id}}</td>
+                <td>{{task.task_url}}</td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation">{{task.task_data}}</div>
+                        <span>{{task.task_data}}</span>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation">{{task.task_result}}</div>
+                        <span>{{task.task_result}}</span>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation">{{task.task_response}}</div>
+                        <span>{{task.task_response}}</span>
+                    </a>
+                </td>
+                <td>{{task.task_status}}</td>
+                <td>{{task.finished_time}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<!--_分页开始-->
+    <div class="dataTables_wrapper">
+	    <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">共{{paginate.pages}}页 </div>
+
+        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_show_result") }}?page=1' >首页</a>
+            <!--_如果有上一页-->
+            {% if paginate.has_prev %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_show_result") }}?page={{ paginate.prev_num }}' >上一页</a>
+            {% else %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href="#" >上一页</a>
+            {% endif %}
+
+            <span>
+                <a class="paginate_button current" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">{{paginate.page}}</a>
+            </span>
+
+            {% if paginate.has_next %}
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_show_result") }}?page={{ paginate.next_num }}'>下一页</a>
+
+		    {% else %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href="#">下一页</a>
+
+            {% endif %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_show_result") }}?page={{ paginate.pages }}'>尾页</a>
+
+		</div>
+
+	<!--_分页结束-->
+    </div>
+</div>
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+
+<script type="text/javascript">
+    /*搜索*/
+    $(document).ready(function () {
+        $("#do_search").click(function(){
+         var key=$("#search_key").val();
+           location.href="{{url_for('admin.list_result_search')}}?page={{paginate.page}}&key=" +key;
+        });
+    });
+</script>
+
+{% endblock %}
+</body>
+</html>

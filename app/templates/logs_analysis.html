@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome-pyecharts</title>
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts-wordcloud.min.js"></script>
+</head>
+<body>
+    <div id="bar1" style="width:1000px; height:600px;"></div>
+    <script>
+        var chart2 = echarts.init(document.getElementById('bar1'),'white',{renderer:'canvas'});
+        $(
+        function () {
+            fetchDataWordCould(chart2)
+            }
+        );
+        function fetchDataWordCould() {
+            $.ajax({
+                type: 'GET',
+                url: "{{url_for('admin.get_logs_info')}}",
+                dataType: 'json',
+                success: function (result2) {
+                    chart2.setOption(result2);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

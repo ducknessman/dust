@@ -1,0 +1,3 @@
+INSERT INTO role (id, name, description, auths, add_time) VALUES (1, 'admin', '超级管理员', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15', '2020-05-01 14:32:52.666334');
+INSERT INTO role (id, name, description, auths, add_time) VALUES (2, 'common', '普通管理员', '1,2,3,4,5,6,7,8,9,14', '2020-05-01 15:32:16.201488');
+INSERT INTO role (id, name, description, auths, add_time) VALUES (3, 'temp', '临时人员', '1,2,3,4,5', '2020-05-06 12:35:56.556321');
