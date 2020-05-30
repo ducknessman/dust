@@ -7,19 +7,19 @@ import os
 
 class BasicConfig:
     BASIC_PATH = os.path.abspath(os.path.dirname(__file__))
-    SECRET_KEY = '123456789'                                                  
+    SECRET_KEY = '123456789'                                                    #密钥用于加密cookies
     #mysql 数据库
     DB_USERNAME = 'root'
     DB_PASSWORD = 'root'
     DB_HOST = '127.0.0.1'
     DB_PORT = '3306'
-    DB_NAME = 'dust'
+    DB_NAME = 'jiaqicms'
     # DB_URI = 'mysql+pymysql://%s:%s@%s:%s/%s?charset=utf8' % (DB_USERNAME,DB_PASSWORD,DB_HOST,DB_PORT,DB_NAME)
     # sqllite
-    DB_URL = 'sqlite:///' + os.path.join(BASIC_PATH, 'data.sqlite')+'?check_same_thread=False'     
+    DB_URL = 'sqlite:///' + os.path.join(BASIC_PATH, 'data.sqlite')+'?check_same_thread=False'     #数据库连接方式
 
-    SQLALCHEMY_DATABASE_URI = DB_URL                                            
-    SQLALCHEMY_TRACK_MODIFICATIONS = False                                      
+    SQLALCHEMY_DATABASE_URI = DB_URL                                            #数据库连接
+    SQLALCHEMY_TRACK_MODIFICATIONS = False                                      #关闭数据库动态跟踪
     TEMPLATES_AUTO_RELOAD = True
     SQLALCHEMY_RECORD_QUERISE = True
 

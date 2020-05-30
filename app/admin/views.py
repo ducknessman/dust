@@ -7,10 +7,10 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from flask_sqlalchemy import get_debug_queries
 from werkzeug.utils import secure_filename
 
-from app.models import User,Role,AdminLog,TaskReport,Tasks,Env,TaskResult,Auth
+from app.models import User,Role,AdminLog,TaskReport,Tasks,Env,TaskResult,Auth,TaskRun
 from app.admin.util import get_welcome_info,line_base,add_example,common_del,edit_example,search_info,task_run,\
-    upload_task,cpu_line,memory_liquid,net_io_line,disk_line,add_common,word_could
-from app.admin.forms import AddTask,AuthForm,RoleForm,UserForm
+    upload_task,cpu_line,memory_liquid,net_io_line,disk_line,add_common,word_could,add_running
+from app.admin.forms import AddTask,AuthForm,RoleForm,UserForm,TaskRunning
 from setting import BasicConfig
 from exts import db
 
@@ -23,6 +23,7 @@ import logging
 admin = Blueprint('admin',__name__)
 line_info = []
 
+# 有无访问权限装饰器： 判断用户权限控制
 def admin_auth(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -42,6 +43,7 @@ def admin_auth(func):
         return func(*args, **kwargs)
     return wrapper
 
+#首页
 @admin.route('/index')
 def index():
     session_id = session['user_id']
@@ -49,12 +51,14 @@ def index():
     username = users.username
     return render_template('index.html',username=username)
 
+#个人信息
 @admin.route('/profile')
 def profile():
     session_id = session['user_id']
     users = User.query.filter_by(user_id=session_id).first()
     return render_template('profile.html',user=users)
 
+#修改密码
 @admin.route('/editpwd',methods=['GET','POST'])
 def editpwd():
     user_id = session['user_id']
@@ -70,6 +74,7 @@ def editpwd():
         db.session.commit()
         return render_template('edit_pwd.html', user=user,message="密码修改成功！")
 
+#校验密码
 @admin.route('/checkpwd')
 def checkpwd():
     oldpwd = request.args.get('oldpwd', '')
@@ -87,6 +92,7 @@ def checkpwd():
         }
     return jsonify(data)
 
+#欢迎页面
 @admin.route('/welcome')
 def welcome():
     global line_info
@@ -105,6 +111,7 @@ def welcome():
     return render_template('welcome.html',username=username,login_count=login_count,login_ip_now=login_ip_now,
                            login_ip_time=login_ip_time,infos=infos)
 
+#通过Ajax获取line数据
 @admin.route('/line')
 def get_line_chart():
     c = line_base(*line_info)
@@ -115,6 +122,7 @@ def get_line_chart():
 #    用例展示     #
 ##################
 
+#用例展示
 @admin.route('/list_show')
 @admin_auth
 def list_show():
@@ -123,6 +131,7 @@ def list_show():
     tasks = paginate.items
     return render_template('list_show.html',tasks=tasks,paginate=paginate)
 
+#添加用例
 @admin.route('/list_add',methods=['GET','POST'])
 @admin_auth
 def list_add():
@@ -140,6 +149,7 @@ def list_add():
             }
         return jsonify(data)
 
+#编辑用例
 @admin.route('/list_edit/',methods=['GET','POST'])
 @admin_auth
 def list_edit():
@@ -164,6 +174,7 @@ def list_edit():
             }
         return jsonify(data)
 
+#删除单个用例
 @admin.route('/list_single_del',methods=['POST'])
 @admin_auth
 def list_single_del():
@@ -173,6 +184,7 @@ def list_single_del():
         return jsonify(data)
 
 
+#批量删除用例
 @admin.route('/list_all_del',methods=['POST'])
 @admin_auth
 def list_all_del():
@@ -181,6 +193,7 @@ def list_all_del():
         data = common_del(Tasks, ids, db)
         return jsonify(data)
 
+#用例执行
 @admin.route('/running_tasks',methods=['POST'])
 @admin_auth
 def running_task():
@@ -192,6 +205,7 @@ def running_task():
         return {'msg':'出现问题了！','status':1002}
 
 
+#用例搜索
 @admin.route('/list_search',methods=['GET','POST'])
 def list_search():
     if request.method == "GET":
@@ -203,6 +217,7 @@ def list_search():
         tasks = paginate.items
         return render_template('list_show.html',paginate=paginate,tasks=tasks)
 
+#报告展示首页
 @admin.route('/list_show_report_index')
 @admin_auth
 def list_show_report_index():
@@ -211,6 +226,7 @@ def list_show_report_index():
     report = paginate.items
     return render_template('list_show_report.html', reports=report, paginate=paginate)
 
+#报告展示
 @admin.route('/list_show_report',methods=['GET'])
 @admin_auth
 def list_show_report():
@@ -218,6 +234,8 @@ def list_show_report():
     print(name)
     return render_template('report/{}.html'.format(name))
 
+
+#报告搜索
 @admin.route('/list_search_report',methods=['GET','POST'])
 def list_search_report():
     if request.method == "GET":
@@ -228,6 +246,7 @@ def list_search_report():
         reports = paginate.items
         return render_template('list_show_report.html',paginate=paginate,reports=reports)
 
+#下载
 @admin.route('/download/<filename>')
 def download(filename):
     if filename == 'demo.xlsx':
@@ -239,6 +258,7 @@ def download(filename):
         print(real_path,real_filename)
     return send_from_directory(real_path,real_filename,mimetype='application/octet-stream')
 
+#上传
 @admin.route('/upload',methods=['GET','POST'])
 def upload():
     size = BasicConfig.MAX_CONTENT_LENGTH / 1024 ** 3
@@ -258,6 +278,7 @@ def upload():
         else:
             return render_template('upload.html',msg='上传出现问题',size=size,info=allow)
 
+#测试结果展示
 @admin.route('/list_show_result')
 @admin_auth
 def list_show_result():
@@ -266,6 +287,7 @@ def list_show_result():
     tasks = paginate.items
     return render_template('list_show_result.html', tasks=tasks, paginate=paginate)
 
+#测试结果搜索
 @admin.route('/list_result_search',methods=['GET'])
 def list_result_search():
     if request.method == "GET":
@@ -276,6 +298,7 @@ def list_result_search():
         tasks = paginate.items
         return render_template('list_show_result.html', paginate=paginate, tasks=tasks)
 
+#用例模板展示
 @admin.route('/list_task_model')
 def list_task_model():
     pages = int(request.args.get('page', 1))
@@ -283,30 +306,76 @@ def list_task_model():
     tasks = paginate.items
     return render_template('list_task_model.html', tasks=tasks, paginate=paginate)
 
+#测试用例执行页面
+@admin.route('/list_running')
+# @admin_auth
+def list_running():
+    pages = int(request.args.get('page', 1))
+    paginate = TaskRun.query.paginate(pages, 10)
+    running = paginate.items
+    return render_template('list_tasks_running.html', running=running, paginate=paginate)
+
+#测试用例执行添加
+@admin.route('/list_running_add',methods=['GET',"POST"])
+# @admin_auth
+def list_running_add():
+    if request.method == "GET":
+        return render_template('list_running_add.html')
+    else:
+        forms = TaskRunning(request.form)
+        if forms.validate():
+            datas = forms.data
+            running_infos = Tasks.query.filter(Tasks.task_id.in_(datas['running_info'].replace('，',',').split(','))).all()
+            running_info = ",".join([str(info.id) for info in running_infos])
+            datas['running_info'] = running_info
+            data = add_running(TaskRun, datas, db)
+        else:
+            data = {
+                "msg": "表单验证失败",
+                "status": "202"
+            }
+        return jsonify(data)
+
+#执行任务搜索
+@admin.route('/list_result_search',methods=['GET'])
+def list_running_search():
+    if request.method == "GET":
+        key = request.args.get('key')
+        pages = int(request.args.get('page', 1))
+        sql = TaskRun.id = key
+        paginate = search_info(TaskRun, sql, pages, db)
+        tasks = paginate.items
+        return render_template('list_tasks_running.html', paginate=paginate, running=tasks)
+
 ##############################
 #    压力测试统计图表展示     #
 #############################
 
+#展示页面
 @admin.route('/control_index')
 @admin_auth
 def control_index():
     return render_template('control/control.html')
 
+#cpu
 @admin.route('/cpu')
 def get_cpu_chart():
     c = cpu_line()
     return c.dump_options_with_quotes()
 
+#内存
 @admin.route("/memory")
 def get_memory_chart():
     mtotal, mused, mfree, stotal, sused, sfree, c = memory_liquid()
     return jsonify({'mtotal': mtotal, 'mused': mused, 'mfree': mfree, 'stotal': stotal, 'sused': sused, 'sfree': sfree, 'liquid': c.dump_options_with_quotes()})
 
+#流量
 @admin.route("/netio")
 def get_net_io_chart():
     c = net_io_line()
     return c.dump_options_with_quotes()
 
+#磁盘
 @admin.route("/disk")
 def get_disk_chart():
     total, used, free, c = disk_line()
@@ -317,6 +386,7 @@ def get_disk_chart():
 #          权限系统          #
 #############################
 
+#权限列表
 @admin.route('/admin_permission')
 @admin_auth
 def admin_permission():
@@ -325,6 +395,7 @@ def admin_permission():
     arts = paginate.items
     return render_template('role_index.html',paginate=paginate,roles=arts)
 
+#添加权限
 @admin.route('/admin_add_permission',methods=['GET','POST'])
 def admin_add_permission():
     if request.method == "GET":
@@ -345,6 +416,7 @@ def admin_add_permission():
             }
         return jsonify(data)
 
+#编辑权限
 @admin.route('/admin_edit_permission',methods=['GET','POST'])
 def admin_edit_permission():
     if request.method == "GET":
@@ -372,6 +444,7 @@ def admin_edit_permission():
             }
         return jsonify(data)
 
+#删除单个权限
 @admin.route('/admin_del_permission',methods=['POST'])
 def admin_del_permission():
     if request.method == "POST":
@@ -379,6 +452,7 @@ def admin_del_permission():
         data = common_del(Role, ids, db)
         return jsonify(data)
 
+#角色列表
 @admin.route('/admin_role')
 @admin_auth
 def admin_role():
@@ -387,6 +461,7 @@ def admin_role():
     arts = paginate.items
     return render_template('admin_permission.html',paginate=paginate,auths=arts)
 
+#添加角色
 @admin.route('/admin_add_role',methods=['GET','POST'])
 def admin_add_role():
     if request.method == "GET":
@@ -407,6 +482,7 @@ def admin_add_role():
             }
         return jsonify(data)
 
+#编辑角色
 @admin.route('/admin_edit_role',methods=['GET','POST'])
 def admin_edit_role():
     if request.method == "GET":
@@ -434,6 +510,7 @@ def admin_edit_role():
             }
         return jsonify(data)
 
+#删除单个角色
 @admin.route('/admin_del_role',methods=['POST'])
 def admin_del_role():
     if request.method == "POST":
@@ -441,6 +518,7 @@ def admin_del_role():
         data = common_del(Auth, ids, db)
         return jsonify(data)
 
+#平台人员展示
 @admin.route('/admin_show_user')
 @admin_auth
 def admin_show_user():
@@ -449,6 +527,7 @@ def admin_show_user():
     arts = paginate.items
     return render_template('admin_show_user.html', paginate=paginate, users=arts)
 
+#平台人员添加
 @admin.route('/admin_user_add',methods=['GET',"POST"])
 def admin_user_add():
     if request.method == "GET":
@@ -474,7 +553,7 @@ def admin_user_add():
 ##############################
 #          日志系统          #
 #############################
-
+#登录日志
 @admin.route('/logs_login')
 @admin_auth
 def logs_login():
@@ -492,6 +571,7 @@ def logs_login():
                 new.append(art)
     return render_template('logs_login.html', paginate=paginate, logs=new)
 
+#登录日志查询
 @admin.route('/logs_login_search')
 @admin_auth
 def logs_login_search():
@@ -503,6 +583,7 @@ def logs_login_search():
         infos = paginate.items
         return render_template('logs_login.html', paginate=paginate, logs=infos)
 
+#慢sql查询
 @admin.after_app_request
 def after_request(response):
     for query in get_debug_queries():
@@ -516,10 +597,12 @@ def after_request(response):
             ) + "}")
     return response
 
+#日志分析
 @admin.route('/logs_analysis')
 def logs_analysis():
     return render_template('logs_analysis.html')
 
+#获取词云信息
 @admin.route('/get_logs_info')
 def get_logs_info():
     c = word_could()

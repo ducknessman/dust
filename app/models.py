@@ -40,14 +40,17 @@ class User(db.Model):
         self.remarks = remarks
         self.reg_time = reg_time
 
+    #获取密码
     @property
     def password(self):
         return self._password
 
+    #设置密码
     @password.setter
     def password(self,raw_password):
         self._password = generate_password_hash(raw_password)
 
+    #检查密码
     def check_password(self,raw_password):
         result = check_password_hash(self.password,raw_password)
         return result
@@ -140,3 +143,11 @@ class OperateLog(db.Model):
     ip = db.Column(db.String(100))  # 登录IP
     operate = db.Column(db.String(600))  # 操作行为
     add_time = db.Column(db.String(100), index=True, default=datetime.now)  # 登录时间 ，默认时间
+
+#任务执行表
+class TaskRun(db.Model):
+    __tablename__ = 'task_run'
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True) #序列编号
+    running_name = db.Column(db.String(100),nullable=False) #执行名称
+    running_info = db.Column(db.String(1024),nullable=False) #执行的用例子编号
+    create_time = db.Column(db.String(100),nullable=False) # 创建时间

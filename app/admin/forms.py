@@ -42,3 +42,8 @@ class UserForm(Form):
     role_id = StringField()
     remarks = StringField()
     reg_time = StringField()
+
+class TaskRunning(Form):
+    running_name = StringField()
+    running_info = StringField()
+    create_time = StringField()

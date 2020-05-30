@@ -17,6 +17,7 @@ from pyecharts import options as opts
 from pyecharts.charts import Line,Gauge,WordCloud
 from pyecharts.globals import SymbolType
 
+#折线图
 def line_base(title,user,task,report,success,fail) -> Line:
     line = (
         Line()
@@ -158,6 +159,7 @@ def disk_line() -> Line:
 
     return total, used, free, c
 
+#词云
 def word_could() -> WordCloud:
     name,value = collection_words()
     data = [z for z in value.items()]
@@ -173,9 +175,11 @@ def word_could() -> WordCloud:
     )
     return wordcould
 
+#列表转置
 def rotate(infos):
     return list(zip(*infos))
 
+#获取首页数据信息
 def get_welcome_info(*models):
     now_time = datetime.datetime.now()
     now = datetime.datetime(now_time.year,now_time.month,now_time.day).strftime('%Y-%m-%d 00:00:00')
@@ -190,6 +194,7 @@ def get_welcome_info(*models):
     infos = rotate([['总量','今日','昨日','本周','本月'],user_info,task_info,report_innfo,success_info,fail_info])
     return infos,[['sum','today','yesterday','week','month'],user_info,task_info,report_innfo,success_info,fail_info]
 
+#获取首页数量
 def collection_db_info(model,now_time,now,tom,week,month):
     counts = model.query.count()
     now_time = now_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -205,6 +210,7 @@ def collection_db_info(model,now_time,now,tom,week,month):
     month_account = model.query.filter(eval(sql.format(month,now_time))).count()
     return [counts,now_account,tom_account,week_account,month_account]
 
+#获取首页成功失败数量
 def get_collection_suc_fail(model,now_time,now,tom,week,month):
     now_time = now_time.strftime('%Y-%m-%d %H:%M:%S')
     sqls = ['',
@@ -226,6 +232,7 @@ def get_collection_suc_fail(model,now_time,now,tom,week,month):
         fail_count.append(sum(fail))
     return suc_count,fail_count
 
+#添加用例
 def add_example(model,datas,db):
     if model.query.filter(model.task_son_id == datas['task_son_id']).first():
         data = {
@@ -255,6 +262,22 @@ def add_example(model,datas,db):
         }
     return data
 
+#添加执行用例
+def add_running(model,datas,db):
+    add_list = model(
+        running_name=datas['running_name'],
+        running_info=datas['running_info'],
+        create_time = datas['create_time']
+    )
+    db.session.add(add_list)
+    db.session.commit()
+    data = {
+        'msg': '修改成功',
+        'status': '200'
+    }
+    return data
+
+#通用删除
 def common_del(model,ids,db):
     ids = ids.split(',')
     if ids:
@@ -273,6 +296,7 @@ def common_del(model,ids,db):
         }
     return data
 
+#用例执行
 def task_run(model,model_result,model_report,model_env,ids,db):
     ids = ids.split(',')
     start_time = datetime.datetime.now()
@@ -344,6 +368,7 @@ def task_run(model,model_result,model_report,model_env,ids,db):
         info = {'msg':'出现问题了！','status':1002}
         return info
 
+#统计结果
 def collection_result(statuses):
     success,fail,error = 0,0,0
     for status in statuses:
@@ -355,16 +380,19 @@ def collection_result(statuses):
             error += 1
     return success,fail,error
 
+#添加测试结果
 def add_common(db, model, **kwargs):
     info = model(**kwargs)
     db.session.add(info)
     db.session.commit()
 
+#添加用户
 def add_user(db, model, **kwargs):
     info = model(**kwargs)
     db.session.add(info)
     db.session.commit()
 
+#修改用例
 def edit_example(model,datas,db):
     update_info = datas
     db.session.query(model).filter_by(task_son_id=datas['task_son_id']).update(update_info)
@@ -375,10 +403,12 @@ def edit_example(model,datas,db):
     }
     return data
 
+#公共搜索方法
 def search_info(model,sql,pages,db):
     info = db.session.query(model).filter(sql).paginate(pages,10)
     return info
 
+#用力上传
 def upload_task(db,model,filename):
     db.session.execute(
         model.__table__.insert(),
