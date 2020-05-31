@@ -1,0 +1,190 @@
+{% include "common_header.html" %}
+<title>{% block title %}测试用例执行{% endblock %}</title>
+{% block header %}{% endblock %}
+
+<style>
+    /*实现隐藏功能*/
+.newsInfo:hover {
+    background: #eee;
+    color: #333;
+    z-index: 999;
+}
+.newsInfo {
+
+    position: relative;
+    z-index: 0;
+}
+.newsInfo span {
+
+    display: none;
+}
+.newsInfo:hover span {
+    display: block;
+    position: absolute;
+    min-width:400px;
+    top: 28px;
+    left:100px;
+    border: 1px solid #cccccc;
+    background: #C1CDC1;
+    color: black;
+    padding: 5px;
+    text-align: left;
+    overflow: hidden;
+}
+.newInfoTruncation {
+    width:120px;
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+</style>
+
+<html>
+<body>
+
+
+{% block main_content %}
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 用例管理
+    <span class="c-gray en">&gt;</span> 测试用例执行
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+
+<div class="page-container">
+	<div class="text-c">
+		<div class="Huiform">
+			<input type="text" class="input-text" style="width:250px" placeholder="任务名称" id="search_key" name="search_key">
+			<button type="submit" class="btn btn-success" id="do_search" name="do_search" >
+                <i class="Hui-iconfont">&#xe665;</i> 搜索任务名称
+            </button>
+		</div>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="admin_permission_add('添加执行任务','{{url_for('admin.list_running_add')}}','','310')" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加执行任务
+            </a>
+        </span>
+        <span class="r">共有数据：<strong>{{ paginate.total }}</strong> 条</span>
+    </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="12">执行任务展示</th>
+			</tr>
+			<tr class="text-c">
+				<th>ID</th>
+				<th>执行任务名称</th>
+				<th>执行任务内容id</th>
+                <th>创建时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		    {% for run in running %}
+			<tr class="text-c">
+				<td>{{run.id}}</td>
+				<td>{{run.running_name}}</td>
+                <td>
+                    <a href="#" class="newsInfo" style="text-decoration:none">
+                        <div class="newInfoTruncation" id="running_info">{{run.running_info}}</div>
+                        <span>{{run.running_info}}</span>
+                    </a>
+                </td>
+                <td>{{run.create_time}}</td>
+				<td>
+                    <a href="javascript:;" onclick="list_running('{{run.running_info}}')" class="ml-5" style="text-decoration:none">
+                        <i class="Hui-iconfont">&#xe64d;</i> 执行用例
+                    </a>
+                </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<!--_分页开始-->
+    <div class="dataTables_wrapper">
+	    <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">共{{paginate.pages}}页 </div>
+
+        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_running") }}?page=1' >首页</a>
+            <!--_如果有上一页-->
+            {% if paginate.has_prev %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href='{{ url_for("admin.list_running") }}?page={{ paginate.prev_num }}' >上一页</a>
+            {% else %}
+            <a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" href="#" >上一页</a>
+            {% endif %}
+
+            <span>
+                <a class="paginate_button current" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">{{paginate.page}}</a>
+            </span>
+
+            {% if paginate.has_next %}
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_running") }}?page={{ paginate.next_num }}'>下一页</a>
+
+		    {% else %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href="#">下一页</a>
+
+            {% endif %}
+
+		    <a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0"  href='{{ url_for("admin.list_running") }}?page={{ paginate.pages }}'>尾页</a>
+
+		</div>
+
+	<!--_分页结束-->
+    </div>
+</div>
+
+
+{% endblock %}
+{% include "common_footer.html" %}
+{% block footr_css_js %}
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script src="{{ url_for('static',filename='js/datatables/1.10.0/jquery.dataTables.min.js') }}"></script>
+
+<script type="text/javascript">
+    /*搜索*/
+    $(document).ready(function () {
+        $("#do_search").click(function(){
+         var key=$("#search_key").val();
+           location.href="{{url_for('admin.list_running_search')}}?page={{paginate.page}}&key=" +key;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+    function admin_permission_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+
+    /*管理员-权限-编辑*/
+    function list_running(ids){
+        $.ajax({
+                type: 'POST',
+                url: "{{ url_for('admin.running_task') }}",
+                dataType: 'json',
+                data : {　　　　　　　　　　　
+    　　　　　　　　id :ids,                             　
+    　　　　　　},
+                success: function(data){
+                        layer.msg('执行成功!',{icon:1,time:1000});
+                    },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+    }
+
+</script>
+
+{% endblock %}
+</body>
+</html>

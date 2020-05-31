@@ -90,7 +90,7 @@
     function fetchDataPie() {
         $.ajax({
             type:"GET",
-            url:'http://127.0.0.1:5566/line',
+            url:"{{url_for('admin.get_line_chart')}}",
             dataType:'json',
             success: function (result) {
                 chart.setOption(result);
