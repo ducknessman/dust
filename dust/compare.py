@@ -40,7 +40,6 @@ class Compare:
                 return 'fail'
 
 
-
     def compare_str(self,result,response,num=0.75):
         percent = difflib.SequenceMatcher(None, result,response).quick_ratio()
         if 'error' in response:

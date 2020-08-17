@@ -13,7 +13,7 @@ class Request:
         self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'}
 
     def request(self,method,url,data,cookies,header=None,timeout=10):
-        header = header if header else self.headers
+        header = {**self.headers,**header} if header else self.headers
         data = {} if data in ["","{}"] else json.loads(data.replace('“','"').replace('”','"'))
         if cookies == 0:
             info = self.send(requests,method,url,data,cookies={},header=header)

@@ -68,6 +68,7 @@ class Tasks(db.Model):
     task_data = db.Column(db.String(4096)) # 用例数据
     task_result = db.Column(db.String(4096),nullable=False) # 预期结果
     task_session = db.Column(db.Integer,nullable=False) #是否需要session ,0:不需要，1：需要
+    sessions = db.Column(db.String(4096)) #登录session
     task_auth = db.Column(db.String(1024))  #用例执行人信息
     task_env = db.Column(db.Integer,nullable=False) #是否需要环境变量，0：不需要，1：stage，2：alpha，3：real
     task_time = db.Column(db.String(4096)) #添加时间

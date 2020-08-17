@@ -19,6 +19,7 @@ class AddTask(Form):
     task_session = StringField(default=0)
     task_auth = StringField()
     task_env = StringField(default=0)
+    sessions = StringField(default='')
     task_time = StringField()
 
 class AuthForm(Form):

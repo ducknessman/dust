@@ -17,8 +17,9 @@ manage.add_command('db',MigrateCommand)
 @manage.option('-p','--password',dest='password')
 @manage.option('-e','--email',dest='email')
 @manage.option('-ph','--phone',dest='phone')
-def create_user(username,password,email,phone):
-    user_name = admin_user.User(username=username,password=password,email=email,phone=phone)
+@manage.option('r', '--role' ,dest='role')
+def create_user(username,password,email,phone,role):
+    user_name = admin_user.User(username=username,password=password,email=email,phone=phone,role_id=role)
     db.session.add(user_name)
     db.session.commit()
     print('添加成功')

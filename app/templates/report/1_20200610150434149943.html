@@ -1,19 +1,4 @@
-#！/usr/bin/env python
-#! -*-coding:utf-8 -*-
-#!@Author : zhuxx
-#!@time : 2020/05/16 15:16
 
-import os
-import json
-
-class CreateReport:
-
-    def __init__(self):
-        basic = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-        self.path = '{basic}/app/templates/report'.format(basic)
-
-    def body(self):
-        body_info = '''
         <html>
 <head>
     <meta charset="utf-8">
@@ -179,17 +164,9 @@ class CreateReport:
 	}
 </script>
 <script type="text/javascript">
-        '''
-        return body_info
-
-    def js(self,data):
-        js_info = '''
-        var resultData = {};
-        '''
-        return js_info.format(data)
-
-    def foot(self):
-        foot_info = '''
+        
+        var resultData = {'testPass': 1, 'testResult': [{'className': '基础测试_01-1-1_1', 'methodName': 'GET', 'description': '测试wsurl的获取', 'spendTime': 79.86987042427063, 'status': '成功', 'log': ['this is result {"code":200,"data":"ws.qa.huohua.cn","message":"操作成功","success":true}, this is response {\'code\': 200, \'data\': \'ws.qa.huohua.cn\', \'message\': \'操作成功\', \'success\': True}']}], 'testName': '1_20200610150434149943', 'testAll': 1, 'testFail': 0, 'beginTime': '2020-06-10 15:04:34.149943', 'totalTime': '124.57099s', 'testSkip': 0};
+        
         function clickRow(obj){
         $("#detailBody").children("tr").attr("style","font-family: Consolas");
         $(obj).attr("style","font-family: Consolas; background-color: #b0d877");
@@ -349,82 +326,4 @@ class CreateReport:
 </script>
 </body>
 </html>
-        '''
-        return foot_info
-
-    def create(self,data,name):
-        body,js,foot = self.body(),self.js(data),self.foot()
-        with open(self.path + '/' + name + '.html','w',encoding='utf-8') as f:
-            info = body + js + foot
-            f.write(str(info))
-
-if __name__ == '__main__':
-    data = {
-    "testPass": 4,
-    "testResult": [
-        {
-            "className": "1",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "2",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "3",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "4",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "5",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "失败",
-            "log": ["this is demo failed!"]
-        },
-        {
-            "className": "6",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "跳过",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "7",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "跳过",
-            "log": ["this is demo!"]
-        }
-    ],
-    "testName": "20201109132744897",
-    "testAll": 7,
-    "testFail": 1,
-    "beginTime": "2020-11-09 13:27:44.917",
-    "totalTime": "11ms",
-    "testSkip": 2
-    }
-    name = '测试数据.html'
-    CreateReport().create(data,name)
+        

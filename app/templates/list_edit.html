@@ -77,6 +77,13 @@
         </div>
 
         <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>accessToken：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" autocomplete="off" value="{{data.sessions}}" placeholder="accessToken" id="session" name="session"/>
+            </div>
+        </div>
+
+        <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>环境信息：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <input type="text" class="input-text" autocomplete="off" value="{{data.task_env}}" placeholder="环境信息" id="task_env" name="task_result"/>
@@ -139,6 +146,7 @@
         var task_auth = $("#task_auth").val();
         var task_env = $("#task_env").val();
         var task_time = $("#task_time").val();
+        var session = $("#session").val();
 
         $.ajax({
             type: 'POST',
@@ -155,7 +163,8 @@
                 task_session:task_session,
                 task_auth:task_auth,
                 task_env:task_env,
-                task_time:task_time
+                task_time:task_time,
+                sessions:session
             },
             success: function(data){
                 if(data.status==200){

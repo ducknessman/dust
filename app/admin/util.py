@@ -252,7 +252,8 @@ def add_example(model,datas,db):
             task_session=datas['task_session'],
             task_auth=datas['task_auth'],
             task_env=datas['task_env'],
-            task_time=datas['task_time']
+            task_time=datas['task_time'],
+            sessions=datas['session']
         )
         db.session.add(add_list)
         db.session.commit()
@@ -336,7 +337,8 @@ def task_run(model,model_result,model_report,model_env,ids,db):
             cookies = task.task_session
             task_result = task.task_result
             running_start_time = time.time()
-            response = Request().request(method,url,data,cookies)
+            session = task.sessions if isinstance(task.sessions,dict) else {'accesstoken':task.sessions}
+            response = Request().request(method,url,data,cookies,header=session)
             status = Compare().judge_type(task_result,response)
             add_common(db,model_result,task_id=task_id,task_son_id=task_son_id,task_url=url,
                        task_data=data,task_result=task_result,task_response=str(response),task_status=status,

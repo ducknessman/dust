@@ -1,19 +1,4 @@
-#！/usr/bin/env python
-#! -*-coding:utf-8 -*-
-#!@Author : zhuxx
-#!@time : 2020/05/16 15:16
 
-import os
-import json
-
-class CreateReport:
-
-    def __init__(self):
-        basic = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-        self.path = '{basic}/app/templates/report'.format(basic)
-
-    def body(self):
-        body_info = '''
         <html>
 <head>
     <meta charset="utf-8">
@@ -179,17 +164,9 @@ class CreateReport:
 	}
 </script>
 <script type="text/javascript">
-        '''
-        return body_info
-
-    def js(self,data):
-        js_info = '''
-        var resultData = {};
-        '''
-        return js_info.format(data)
-
-    def foot(self):
-        foot_info = '''
+        
+        var resultData = {'testPass': 4, 'testResult': [{'className': '页面接口搜索-2-2_1', 'methodName': 'GET', 'description': 'current', 'spendTime': 0.11351609230041504, 'status': '成功', 'log': ['this is result {"code":200,"data":{"avatar":"","bindTelType":0,"cityId":18909,"cityName":"潍坊","dataLevel":99999,"departmentId":670,"departmentName":"成都三级测试部门","email":"zhuxuexiang@huohua.cn","frozen":0,"id":58837,"leaderId":58729,"leaderName":"刘睿权","name":"zhuxuexiang","personalPermission":0,"phone":"18745845875","positionLevel":0,"sex":0,"status":0,"wechatCode":"","wechatQrcodeImage":"","wechatQrcodeString":"","workMobile":""},"message":"操作成功","success":true}, this is response {\'code\': 200, \'data\': {\'avatar\': \'\', \'bindTelType\': 0, \'cityId\': 18909, \'cityName\': \'潍坊\', \'dataLevel\': 99999, \'departmentId\': 670, \'departmentName\': \'成都三级测试部门\', \'email\': \'zhuxuexiang@huohua.cn\', \'frozen\': 0, \'id\': 58837, \'leaderId\': 58729, \'leaderName\': \'刘睿权\', \'name\': \'zhuxuexiang\', \'personalPermission\': 0, \'phone\': \'18745845875\', \'positionLevel\': 0, \'sex\': 0, \'status\': 0, \'wechatCode\': \'\', \'wechatQrcodeImage\': \'\', \'wechatQrcodeString\': \'\', \'workMobile\': \'\'}, \'message\': \'操作成功\', \'success\': True}']}, {'className': '页面接口搜索-2-2_2', 'methodName': 'GET', 'description': 'page', 'spendTime': 0.11650848388671875, 'status': '成功', 'log': ['this is result {"code":200,"data":{"list":[],"pageNum":1,"pageSize":10,"total":0},"message":"操作成功","success":true}, this is response {\'code\': 200, \'data\': {\'list\': [], \'pageNum\': 1, \'pageSize\': 10, \'total\': 0}, \'message\': \'操作成功\', \'success\': True}']}, {'className': '页面接口搜索-2-2_3', 'methodName': 'GET', 'description': 'wsUrl', 'spendTime': 0.11156940460205078, 'status': '成功', 'log': ['this is result {"code":200,"data":"ws.qa.huohua.cn","message":"操作成功","success":true}, this is response {\'code\': 200, \'data\': \'ws.qa.huohua.cn\', \'message\': \'操作成功\', \'success\': True}']}, {'className': '页面接口搜索-2-2_4', 'methodName': 'GET', 'description': 'enable', 'spendTime': 0.16997289657592773, 'status': '成功', 'log': ['this is result {"code":200,"data":{"enable":false},"message":"操作成功","success":true}, this is response {\'code\': 200, \'data\': {\'enable\': False}, \'message\': \'操作成功\', \'success\': True}']}], 'testName': '2_20200610151109170554', 'testAll': 4, 'testFail': 0, 'beginTime': '2020-06-10 15:11:09.170554', 'totalTime': '0.518456s', 'testSkip': 0};
+        
         function clickRow(obj){
         $("#detailBody").children("tr").attr("style","font-family: Consolas");
         $(obj).attr("style","font-family: Consolas; background-color: #b0d877");
@@ -349,82 +326,4 @@ class CreateReport:
 </script>
 </body>
 </html>
-        '''
-        return foot_info
-
-    def create(self,data,name):
-        body,js,foot = self.body(),self.js(data),self.foot()
-        with open(self.path + '/' + name + '.html','w',encoding='utf-8') as f:
-            info = body + js + foot
-            f.write(str(info))
-
-if __name__ == '__main__':
-    data = {
-    "testPass": 4,
-    "testResult": [
-        {
-            "className": "1",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "2",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "3",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "4",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "成功",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "5",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "失败",
-            "log": ["this is demo failed!"]
-        },
-        {
-            "className": "6",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "跳过",
-            "log": ["this is demo!"]
-        },
-        {
-            "className": "7",
-            "methodName": "testDemo",
-            "description": "测试DEMO",
-            "spendTime": "11ms",
-            "status": "跳过",
-            "log": ["this is demo!"]
-        }
-    ],
-    "testName": "20201109132744897",
-    "testAll": 7,
-    "testFail": 1,
-    "beginTime": "2020-11-09 13:27:44.917",
-    "totalTime": "11ms",
-    "testSkip": 2
-    }
-    name = '测试数据.html'
-    CreateReport().create(data,name)
+        

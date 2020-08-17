@@ -41,7 +41,11 @@ class UploadExcel:
             yield from self.combine_dict(title,value)
 
     def combine_dict(self,title,value):
-        for i in range(0,len(value),11):
-            single_task = dict(zip(title,value[i:i+11]))
+        for i in range(0,len(value),12):
+            single_task = dict(zip(title,value[i:i+12]))
             single_task['task_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
             yield single_task
+
+if __name__ == '__main__':
+    st = UploadExcel('D:\\python_project\\dust-master\\uploade_data\\demo.xlsx')
+    print(list(st.read_excel()))

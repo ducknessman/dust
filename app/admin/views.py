@@ -211,7 +211,7 @@ def list_search():
     if request.method == "GET":
         key = request.args.get('key')
         pages = int(request.args.get('page', 1))
-        sql = Tasks.task_id.like(f'%{key}%') | Tasks.task_name.like(f'%{key}%')
+        sql = Tasks.task_id.like('%{}%'.format(key)) | Tasks.task_name.like('%{}%'.format(key))
         # sql = (Tasks.task_id == key)
         paginate = search_info(Tasks,sql,pages,db)
         tasks = paginate.items
@@ -241,7 +241,7 @@ def list_search_report():
     if request.method == "GET":
         key = request.args.get('key')
         pages = int(request.args.get('page', 1))
-        sql = TaskReport.report_name.like(f'%{key}%')
+        sql = TaskReport.report_name.like('%{}%'.format(key))
         paginate = search_info(TaskReport,sql,pages,db)
         reports = paginate.items
         return render_template('list_show_report.html',paginate=paginate,reports=reports)
@@ -293,7 +293,7 @@ def list_result_search():
     if request.method == "GET":
         key = request.args.get('key')
         pages = int(request.args.get('page', 1))
-        sql = TaskResult.task_id.like(f'%{key}%') | TaskResult.task_son_id.like(f'%{key}%')
+        sql = TaskResult.task_id.like('%{}%'.format(key)) | TaskResult.task_son_id.like('%{}%'.format(key))
         paginate = search_info(TaskResult, sql, pages, db)
         tasks = paginate.items
         return render_template('list_show_result.html', paginate=paginate, tasks=tasks)
@@ -578,7 +578,7 @@ def logs_login_search():
     if request.method == "GET":
         key = request.args.get('key')
         pages = int(request.args.get('page', 1))
-        sql = AdminLog.operate.like(f'%{key}%')
+        sql = AdminLog.operate.like('%{}%'.format(key))
         paginate = search_info(AdminLog, sql, pages, db)
         infos = paginate.items
         return render_template('logs_login.html', paginate=paginate, logs=infos)
