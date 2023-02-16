@@ -8,4 +8,4 @@ flask-sqlalchemy==2.4.1
 psutil==5.7.0
 pyecharts==1.7.1
 wtforms==2.3.1
-Werkzeug==1.0.1
+Werkzeug==2.2.3
